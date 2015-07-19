@@ -41,7 +41,7 @@ void ItemManager::MainLoop(HDC hdc){
 	static int cnt;
 
 	itemhdc = hdc;
-	if (cnt >= SpawnInterval){
+	if (cnt >= 20){
 		SpawnItem();
 
 		cnt = 0;
@@ -61,6 +61,7 @@ void ItemManager::MainLoop(HDC hdc){
 			iobj[i]->Item_paint(hdc);
 			if (iobj[i]->get_onActive() == 0){
 				iobj[i].reset();
+				cnt = -SpawnInterval;
 				break;
 			}
 		}

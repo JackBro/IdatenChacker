@@ -87,7 +87,7 @@ void EnemyManager::MainLoop(HDC hdc){
 		SpawnEnemy();
 
 		
-		cnt = -100;
+		cnt = 0;
 	}
 	
 	cnt++;
@@ -107,7 +107,7 @@ void EnemyManager::MainLoop(HDC hdc){
 			}
 			if (eobj[i]->get_onActive() == 0){
 				eobj[i].reset();
-				cnt = -100;
+				cnt = -SpawnInterval;
 				break;
 			}
 		}
