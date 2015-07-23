@@ -7,7 +7,9 @@ Enemy01::Enemy01(int x,int y){
 	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("enemy01.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	}
-
+Enemy01::~Enemy01(){
+	DeleteObject(enemy_hb);
+}
 
 int Enemy01::init(){
 	//À•W‚ÍŒã‚ÅC³‚·‚é
@@ -79,9 +81,12 @@ int Enemy01::hit_bulletcheck(){
 			if (plstats->c_flg == 3 || plstats->c_flg == 2){}
 			else
 				DEADflg = -1;		//‚ ‚½‚Á‚½‚çŽ€–S
-				enemy_bullet.onActive = 0;
-				enemy.onActive = 0;
+
+			enemy_bullet.onActive = 0;
 		}
+		
 	}
+	else
+		DEADflg = 0;
 	return 0;
 }

@@ -22,7 +22,9 @@ public:
 		Backimg_x = 0;
 		Backimg_y = 0;
 	};
-
+	~Scroll(){
+		DeleteObject(hb_all);
+	}
 	
 	float scroll_kansu(HDC);
 

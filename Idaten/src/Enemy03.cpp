@@ -14,6 +14,7 @@ Enemy03::Enemy03(int x,int y)
 
 Enemy03::~Enemy03()
 {
+	DeleteObject(enemy_hb);
 }
 
 int Enemy03::init(){

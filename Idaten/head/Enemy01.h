@@ -14,6 +14,6 @@ private:
 
 public:
 	Enemy01(int,int);
-	~Enemy01(){};
+	~Enemy01();
 };
 
