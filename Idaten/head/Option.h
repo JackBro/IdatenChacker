@@ -9,9 +9,9 @@
 #define PLAYER_HEIGHT 640
 #define PLAYER_WIDTH  1280
 
-
-#define WINDOW_WIDTH	1100					//画面横サイズ
-#define WINDOW_HEIGHT	360						//画面縦サイズ
+//画面サイズは１６：９
+#define WINDOW_WIDTH	(16*70)					//画面横サイズ
+#define WINDOW_HEIGHT	(9*70)					//画面縦サイズ
 
 #define BLOCK_PAINT_X  WINDOW_WIDTH/CHIP_SIZE		//ブロック横個数
 #define BLOCK_PAINT_Y  WINDOW_HEIGHT/CHIP_SIZE		//ブロック縦個数

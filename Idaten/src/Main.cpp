@@ -55,7 +55,6 @@ HWND hWnd;
 
 
 PAINT pl_paint_obj;
-
 OIL *oilobj;
 MOVE *pl_move_obj;
 Scroll *scrobj;
@@ -88,7 +87,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ウインドウの作成
 	hWnd = CreateWindow(
-		TEXT("Window01"), TEXT("STG 自機の弾"),					// ウインドウのタイトル名
+		TEXT("Window01"), TEXT("IdatenChacker"),					// ウインドウのタイトル名
 		WS_OVERLAPPEDWINDOW^WS_THICKFRAME^WS_MAXIMIZEBOX,			// ウインドウスタイル
 		CW_USEDEFAULT,												// ウィンドウの表示X座標
 		CW_USEDEFAULT,												// ウィンドウの表示Y座標
@@ -152,7 +151,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		Paint(hdc_back);				// Paint関数へ
 
 		//バックバッファに保存された画像を表画面に描画
-		BitBlt(hdc, 0, 0, 1100, 500, hdc_back, 0, 0, SRCCOPY);
+		BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_back, 0, 0, SRCCOPY);
 
 
 
@@ -170,7 +169,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		// 互換デバイスコンテキストの作成
 		hdc_back = CreateCompatibleDC(hdc);
 		// 互換ビットマップの作成
-		hb_back = CreateCompatibleBitmap(hdc, 1100, 500);
+		hb_back = CreateCompatibleBitmap(hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
 		// オブジェクトの選択
 		SelectObject(hdc_back, hb_back);
 		// 描画の終了
@@ -369,7 +368,7 @@ int Paint(HDC hdc)
 				oilobj = new(OIL);
 				pl_move_obj = new(MOVE);
 				tobj = new(Timer);
-				scrobj->Backimg_x = -(9  * CHIP_SIZE - 550);
+				scrobj->Backimg_x =0;
 				scrobj->Backimg_y = -(30 * CHIP_SIZE - 350);
 				player.x = 240;
 				player.y = 200;
