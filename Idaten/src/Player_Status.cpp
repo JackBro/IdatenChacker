@@ -1,3 +1,4 @@
+#pragma once
 #include"Player_Status.h"
 #pragma comment(lib,"msimg32.lib")
 
@@ -6,7 +7,7 @@ void OIL::Item(int a)
 {
 	if (a == 1 || a == -1){
 		Oil_Gage += a;
-		}
+	}
 	if (Oil_Gage > 5){
 		Oil_Gage = 5;
 	}

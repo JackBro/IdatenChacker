@@ -12,7 +12,6 @@ class OIL{
 #define TYOIYASE 3
 #define GARI     4
 
-
 	int Power_w;//オイルゲージのwidth
 	int gage;//オイルゲージのwidthを変更するための値
 	HBITMAP hb_OilGage = (HBITMAP)LoadImage(NULL, TEXT("Oil.bmp"),
@@ -31,8 +30,8 @@ public:
 	int Oil_Gage;//オイルゲージ管理
 	int c_sts;//キャラステタース切り替え
 	OIL(){
-		c_sts = 0;
-		Oil_Gage = 0;
+		c_sts = 2;
+		Oil_Gage = 3;
 	}
 	~OIL(){
 		DeleteObject(hb_OilGage);
