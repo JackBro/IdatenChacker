@@ -150,7 +150,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		Paint(hdc_back);				// Paint関数へ
 
 		//バックバッファに保存された画像を表画面に描画
-		BitBlt(hdc, 0, 0, 1100, 500, hdc_back, 0, 0, SRCCOPY);
+		BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_back, 0, 0, SRCCOPY);
 
 
 
@@ -168,7 +168,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		// 互換デバイスコンテキストの作成
 		hdc_back = CreateCompatibleDC(hdc);
 		// 互換ビットマップの作成
-		hb_back = CreateCompatibleBitmap(hdc, 1100, 500);
+		hb_back = CreateCompatibleBitmap(hdc, WINDOW_WIDTH, WINDOW_HEIGHT);
 		// オブジェクトの選択
 		SelectObject(hdc_back, hb_back);
 		// 描画の終了
