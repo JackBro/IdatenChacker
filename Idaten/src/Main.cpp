@@ -28,19 +28,20 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// ウインドウプロシージャ関数
 
-enum Scene{ Title, Stage1, End };
+enum Scene{ Title, End, Stage1 };
 int SceneNum;
 
 int Paint(HDC);
 int Paint_BG(HDC);
 int Init_Game();
-int Get_Key();
+int Get_Key(int);
 int SceneChanger();
 
 #define KEY_SPACE 32
 
-HBITMAP title_hb;	// ビットマップハンドル
-HBITMAP end_hb;	// ビットマップハンドル
+//HBITMAP title_hb;	// ビットマップハンドル
+//HBITMAP end_hb;	// ビットマップハンドル
+HBITMAP menu_hb[2];	//タイトルやクリア画面
 
 BYTE key_input_buff;// キーボード情報
 BYTE key_buff[256];
@@ -175,12 +176,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		ReleaseDC(hWnd, hdc);
 
 		// ビットマップハンドルに画像データを読み込み保存しておく
-		//シーン
+		//シーン用BITMAP
+		menu_hb[Title] = (HBITMAP)LoadImage(NULL, TEXT("title.bmp"), IMAGE_BITMAP,
+			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		menu_hb[End] = (HBITMAP)LoadImage(NULL, TEXT("end.bmp"), IMAGE_BITMAP,
+			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		/*
 		title_hb = (HBITMAP)LoadImage(NULL, TEXT("title.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		end_hb = (HBITMAP)LoadImage(NULL, TEXT("end.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-				
+			*/	
 	
 
 
@@ -191,8 +197,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		DeleteDC(hdc_back);
 		// オブジェクトの解放 
 		DeleteObject(hb_back);
-		DeleteObject(title_hb);
-		DeleteObject(end_hb);
+		DeleteObject(menu_hb);
 		PostQuitMessage(0);
 		return 0;
 
@@ -250,7 +255,7 @@ int Paint(HDC hdc)
 	if (SceneNum == Title){
 		Paint_BG(hdc);		// 背景描画関数へ
 		if (cc > 50){
-			cc = Get_Key();
+			cc = Get_Key(cc);
 			if (cc == 1){
 				SceneChanger();
 				eobj = new(EnemyManager);
@@ -280,8 +285,8 @@ int Paint(HDC hdc)
 	//Block
 	blobj->toPoint(&paint_player_obj->obj2->player);
 	blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
-	int aa = blobj->block_kansu(hdc);
-	if (aa == End){
+	int aa = blobj->block_kansu(hdc);	//値を受け取っていたらクリアへ
+	if (aa == 2){
 		SceneNum = End;
 		return 0;
 	}
@@ -333,7 +338,7 @@ int Paint(HDC hdc)
 	//キャラが画面座標０より外へ出ないように抑制
 	if (paint_player_obj->obj2->player.x < 0)	paint_player_obj->obj2->player.x = 0;
 	if (paint_player_obj->obj2->player.y < 0)	paint_player_obj->obj2->player.y = 0;
-	DebugStringFloat("%f",paint_player_obj->obj2->player.y,hdc,200,200,20);
+//	DebugStringFloat("%f",paint_player_obj->obj2->player.y,hdc,200,200,20);
 	//以下描画処理
 	paint_player_obj->char_strc(&paint_player_obj->obj2->player);
 	paint_player_obj->Paint_Player(hdc);
@@ -344,7 +349,7 @@ int Paint(HDC hdc)
 	else if (SceneNum == End){
 		Paint_BG(hdc);
 		if (cc > 50){
-			cc = Get_Key();
+			cc = Get_Key(cc);
 			if (cc == 1){
 				SceneChanger();
 				delete eobj;
@@ -365,7 +370,9 @@ int Paint(HDC hdc)
 
 
 ///// キー入力関数 ///////////////////////////////////////////////////////
-int Get_Key()
+//スペースキーが押されていた場合１を返す
+//それ以外は値をそのまま返します
+int Get_Key(int count)
 {
 	GetKeyboardState(key_buff);
 	key_input_buff = 0;
@@ -375,12 +382,15 @@ int Get_Key()
 		return 1;
 	}
 
-	return 50;
+	return count;
 }
 
 int Paint_BG(HDC hdc){
 	HDC hdc_work;
 	hdc_work = CreateCompatibleDC(hdc);
+	SelectObject(hdc_work, menu_hb[SceneNum]);		// オブジェクトの選択
+	BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
+	/*
 	if (SceneNum == Title){
 		SelectObject(hdc_work, title_hb);		// オブジェクトの選択
 		BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
@@ -389,6 +399,7 @@ int Paint_BG(HDC hdc){
 		SelectObject(hdc_work, end_hb);		// オブジェクトの選択
 		BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
 	}
+	*/
 
 
 	DeleteDC(hdc_work);// デバイスコンテキストの解放
