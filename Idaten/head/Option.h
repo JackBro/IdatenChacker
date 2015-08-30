@@ -3,6 +3,10 @@
 //////////////ブロック/////////////
 #define MAP_WIDTH  220   //画面の横幅、  ブロックの横の要素数
 #define MAP_HEIGHT 48    //画面の縦幅　　ブロックの縦の要素数
+
+#define STAGE2_WIDTH 320
+#define STAGE2_HEIGHT 48
+
   
 #define CHIP_SIZE   30   //一つのブロックのサイズ 
 
@@ -36,3 +40,5 @@
 
 //アイテム
 #define ITEM_SPAWN_INTERVAL 80
+
+enum Scene{ Title, End, Stage1,Stage2 };

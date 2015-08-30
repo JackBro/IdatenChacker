@@ -8,7 +8,7 @@ class Scroll{
 
 	HBITMAP hb_all = (HBITMAP)LoadImage(NULL, TEXT("bg.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
-	
+	int stageNum;
 	
 public:
 
@@ -21,7 +21,18 @@ public:
 		BackMoveY = 0;
 		Backimg_x = 0;
 		Backimg_y = 0;
+		stageNum = 0;
 	};
+
+	Scroll(int sNum){
+		stageNum = sNum;
+		BackMoveX = 0;
+		BackMoveY = 0;
+		Backimg_x = 0;
+		Backimg_y = 0;
+
+	}
+
 	~Scroll(){
 		DeleteObject(hb_all);
 	}

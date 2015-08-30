@@ -28,7 +28,7 @@
 
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// ウインドウプロシージャ関数
 
-enum Scene{ Title, End, Stage1 };
+
 int SceneNum;
 
 int Paint(HDC);
@@ -267,12 +267,33 @@ int Paint(HDC hdc)
 				//paint_player_obj->obj2 = new(MOVE);
 				
 				tobj = new(Timer);
-				scrobj->Backimg_x = -(9  * CHIP_SIZE - 550);
+				scrobj->Backimg_x = 0;
 				scrobj->Backimg_y = -(30 * CHIP_SIZE - 350);
 			
 			}
 		}
 
+	}
+	else if (SceneNum < 0){	//数カウントの後　SceneNumberを一度ひっくり返してオブジェクトの交換を行う
+		Paint_BG(hdc);
+		if (cc > 10){	
+			SceneNum *= -1;	//マイナスの値になってるSceneNumを戻す
+			
+			delete scrobj;
+			scrobj = new Scroll(SceneNum);
+
+			delete blobj;
+			blobj = new(Block);
+			
+			delete eobj;
+			eobj = new(EnemyManager);
+			
+			delete iobj;
+			iobj = new(ItemManager);
+
+			scrobj->Backimg_x = 0;
+
+		}
 	}
 	else if (SceneNum == Stage1){
 		paint_player_obj->obj2->C_sts(paint_player_obj->obj->c_sts, &paint_player_obj->obj->Oil_Gage);
@@ -285,9 +306,11 @@ int Paint(HDC hdc)
 	//Block
 	blobj->toPoint(&paint_player_obj->obj2->player);
 	blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
-	int aa = blobj->block_kansu(hdc);	//値を受け取っていたらクリアへ
+	int aa = blobj->block_kansu(hdc);	//値を受け取っていたら次へ
 	if (aa == 2){
-		SceneNum = End;
+		SceneNum++;
+		SceneNum *= -1;
+		cc = 0;
 		return 0;
 	}
 
@@ -344,6 +367,9 @@ int Paint(HDC hdc)
 	paint_player_obj->Paint_Player(hdc);
 
 	tobj->MainTimer(hdc);
+
+	}
+	else if (SceneNum == Stage2){
 
 	}
 	else if (SceneNum == End){

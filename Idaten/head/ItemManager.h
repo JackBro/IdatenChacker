@@ -87,9 +87,9 @@ class ItemManager{
 
 		//int getMapID();			//マップIDの取得<未使用>
 
-		int SpawnItem();		//敵の生成
-		int GetSpawnPoint(int);	//敵の出現ポイントを指定する。
-		void SetSpawnPoint();	//敵の出現ポイントを初期化しておく。
+		int SpawnItem();		//アイテムの生成
+		int GetSpawnPoint(int);	//アイテムの出現ポイントを指定する。
+		void SetSpawnPoint();	//アイテムの出現ポイントを初期化しておく。
 
 		int Maxitem;	//アイテム最大数（可変）
 		const int SpawnInterval = ITEM_SPAWN_INTERVAL;		//リスポーンするまでのインターバル
@@ -101,7 +101,7 @@ class ItemManager{
 
 		int chara_strc(player_info *tp);	//マネージャからキャラのステータスを格納する
 
-		int item_scroll(int, int);		//敵がスクロールに対応するため値を渡す
+		int item_scroll(int, int);		//スクロールに対応するため値を渡す
 		int stage_coord(int, int);		//スポーンする座標値が画面からの座標になるためグローバルの座標がひつよう
 
 		void MainLoop(HDC);
