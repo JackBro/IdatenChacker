@@ -14,8 +14,8 @@
 #define PLAYER_WIDTH  1280
 
 //画面サイズは１６：９
-#define WINDOW_WIDTH	(16*70)					//画面横サイズ
-#define WINDOW_HEIGHT	(9*70)					//画面縦サイズ
+#define WINDOW_WIDTH	(16*70)					//画面横サイズ 1120
+#define WINDOW_HEIGHT	(9*70)					//画面縦サイズ	630
 
 #define BLOCK_PAINT_X  WINDOW_WIDTH/CHIP_SIZE		//ブロック横個数
 #define BLOCK_PAINT_Y  WINDOW_HEIGHT/CHIP_SIZE		//ブロック縦個数
@@ -41,4 +41,4 @@
 //アイテム
 #define ITEM_SPAWN_INTERVAL 80
 
-enum Scene{ Title, End, Stage1,Stage2 };
+enum Scene{ Title, End, Stage1,Stage2, Boss};
