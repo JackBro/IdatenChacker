@@ -32,7 +32,7 @@ LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// ƒEƒCƒ“ƒhƒEƒvƒƒV[ƒWƒƒŠ
 int SceneNum;
 
 int Paint(HDC);
-int Paint_BG(HDC);
+int Paint_BG(HDC,int);
 int Init_Game();
 int Get_Key(int);
 int SceneChanger();
@@ -41,7 +41,7 @@ int SceneChanger();
 
 //HBITMAP title_hb;	// ƒrƒbƒgƒ}ƒbƒvƒnƒ“ƒhƒ‹
 //HBITMAP end_hb;	// ƒrƒbƒgƒ}ƒbƒvƒnƒ“ƒhƒ‹
-HBITMAP menu_hb[2];	//ƒ^ƒCƒgƒ‹‚âƒNƒŠƒA‰æ–Ê
+HBITMAP menu_hb[5];	//ƒ^ƒCƒgƒ‹‚âƒNƒŠƒA‰æ–Ê
 
 BYTE key_input_buff;// ƒL[ƒ{[ƒhî•ñ
 BYTE key_buff[256];
@@ -181,12 +181,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		menu_hb[End] = (HBITMAP)LoadImage(NULL, TEXT("end.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		menu_hb[Stage2] = (HBITMAP)LoadImage(NULL, TEXT("waitScene.bmp"), IMAGE_BITMAP,
+			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+		menu_hb[Boss] = (HBITMAP)LoadImage(NULL, TEXT("waitScene.bmp"), IMAGE_BITMAP,
+			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		/*
 		title_hb = (HBITMAP)LoadImage(NULL, TEXT("title.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		end_hb = (HBITMAP)LoadImage(NULL, TEXT("end.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-			*/	
+		*/	
 	
 
 
@@ -253,7 +257,7 @@ int Paint(HDC hdc)
 	
 	static int cc;
 	if (SceneNum == Title){
-		Paint_BG(hdc);		// ”wŒi•`‰æŠÖ”‚Ö
+		Paint_BG(hdc,Title);		// ”wŒi•`‰æŠÖ”‚Ö
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
@@ -274,11 +278,13 @@ int Paint(HDC hdc)
 		}
 
 	}
-	else if (SceneNum < 0){	//”ƒJƒEƒ“ƒg‚ÌŒã@SceneNumber‚ðˆê“x‚Ð‚Á‚­‚è•Ô‚µ‚ÄƒIƒuƒWƒFƒNƒg‚ÌŒðŠ·‚ðs‚¤
-		Paint_BG(hdc);
-		if (cc > 10){	
+	else if (SceneNum < 0){
+		
+		Paint_BG(hdc,-SceneNum);
+	
+
+		if (cc > 5){	
 			SceneNum *= -1;	//ƒ}ƒCƒiƒX‚Ì’l‚É‚È‚Á‚Ä‚éSceneNum‚ð–ß‚·
-			
 			delete scrobj;
 			scrobj = new Scroll(SceneNum);
 
@@ -292,10 +298,10 @@ int Paint(HDC hdc)
 			iobj = new(ItemManager);
 
 			scrobj->Backimg_x = 0;
-
+			scrobj->Backimg_y = 0;
 		}
 	}
-	else if (SceneNum == Stage1){
+	else if (SceneNum == Stage1 || SceneNum == Stage2){
 		paint_player_obj->obj2->C_sts(paint_player_obj->obj->c_sts, &paint_player_obj->obj->Oil_Gage);
 		paint_player_obj->obj2->Move();
 
@@ -306,13 +312,18 @@ int Paint(HDC hdc)
 	//Block
 	blobj->toPoint(&paint_player_obj->obj2->player);
 	blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
-	int aa = blobj->block_kansu(hdc);	//’l‚ðŽó‚¯Žæ‚Á‚Ä‚¢‚½‚çŽŸ‚Ö
+	int aa = 0;
+	aa = blobj->block_kansu(hdc);	//’l‚ðŽó‚¯Žæ‚Á‚Ä‚¢‚½‚çŽŸ‚Ö
 	if (aa == 2){
 		SceneNum++;
 		SceneNum *= -1;
 		cc = 0;
+		DebugStringVal("%d", SceneNum, hdc, 200, 200, 20);
+
 		return 0;
+
 	}
+
 
 	//Enemy
 	//-----------------------------
@@ -369,11 +380,14 @@ int Paint(HDC hdc)
 	tobj->MainTimer(hdc);
 
 	}
-	else if (SceneNum == Stage2){
-
+	else if (SceneNum == Boss) {
+		if (cc > 10) {
+			SceneNum = End;
+			cc = 0;
+		}
 	}
 	else if (SceneNum == End){
-		Paint_BG(hdc);
+		Paint_BG(hdc,End);
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
@@ -389,7 +403,7 @@ int Paint(HDC hdc)
 		
 	}
 	cc++;
-
+	DebugStringVal("%d", SceneNum, hdc, 20 * SceneNum + 200, 200, 20);
 	return 0;
 }
 
@@ -411,21 +425,12 @@ int Get_Key(int count)
 	return count;
 }
 
-int Paint_BG(HDC hdc){
+int Paint_BG(HDC hdc ,int Num){
 	HDC hdc_work;
 	hdc_work = CreateCompatibleDC(hdc);
-	SelectObject(hdc_work, menu_hb[SceneNum]);		// ƒIƒuƒWƒFƒNƒg‚Ì‘I‘ð
-	BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
-	/*
-	if (SceneNum == Title){
-		SelectObject(hdc_work, title_hb);		// ƒIƒuƒWƒFƒNƒg‚Ì‘I‘ð
-		BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
-	}
-	else if (SceneNum == End){
-		SelectObject(hdc_work, end_hb);		// ƒIƒuƒWƒFƒNƒg‚Ì‘I‘ð
-		BitBlt(hdc, 0, 0, 1100, 350, hdc_work, 0, 0, SRCCOPY);
-	}
-	*/
+	SelectObject(hdc_work, menu_hb[Num]);		// ƒIƒuƒWƒFƒNƒg‚Ì‘I‘ð
+	BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_work, 0, 0, SRCCOPY);
+	
 
 
 	DeleteDC(hdc_work);// ƒfƒoƒCƒXƒRƒ“ƒeƒLƒXƒg‚Ì‰ð•ú
