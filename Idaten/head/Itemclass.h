@@ -11,13 +11,15 @@ protected:
 
 		player_info *plstats;
 
-		//キャラのステータスを一部分保存しておく構造体
-public:
-		struct item_info{
+		int itemID;
+
+		struct item_info {
 			float x, y;
 			int width, height;
 			int onActive;
 		}item;
+public:
+
 
 
 		//共有メソッド
@@ -26,6 +28,8 @@ public:
 
 		int hit_itemcheck();		//敵との当たり判定
 
+		void ItemID(int a) { itemID = a; }
+		int ItemID() { return itemID; }
 
 		int item_scroll(int, int);
 		int getItemtype(){ return itemtype; }

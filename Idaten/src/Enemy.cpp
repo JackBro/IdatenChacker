@@ -15,6 +15,8 @@ Enemy::Enemy(){
 	enemy.anim_count = 0;
 	enemy.MAX_Tcnt = 0;
 
+	enemyID = 0;
+
 	enemy_bullet.onActive = 0;
 }
 

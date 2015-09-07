@@ -8,6 +8,8 @@ Itemclass::Itemclass()
 	item.width = 40;
 	item.height = 50;
 	item.onActive = 0;
+
+	itemID = 0;
 }
 
 

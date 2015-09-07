@@ -99,7 +99,7 @@ float Scroll::scroll_kansu(HDC hdc)
 	Backimg_x += BackMoveX;
 	Backimg_y += BackMoveY;
 
-	BitBlt(hdc, (int)Backimg_x/*/2*/, (int)Backimg_y, MAP_WIDTH * CHIP_SIZE, MAP_HEIGHT * CHIP_SIZE, hdc_work, 0, 1000, SRCCOPY);
+	BitBlt(hdc, (int)Backimg_x, (int)Backimg_y, MAP_WIDTH * CHIP_SIZE, MAP_HEIGHT * CHIP_SIZE, hdc_work, 0, 1000, SRCCOPY);
 
 	/*DebugStringVal("A%d", MAP_HEIGHT * CHIP_SIZE, hdc, 100, 200, 20);
 	DebugStringVal("A%d", MAP_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE-90, hdc, 100, 220, 20);

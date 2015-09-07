@@ -29,6 +29,7 @@ protected:
 	int DEADflg = 0;	//敵とキャラクターが接触した場合に真（-１）ゲージを直接いじるので－１
 	int Jump = 0;		//ここでのみ使用する
 
+	int enemyID;		//敵の番号
 	
 
 	//敵のデバイスコンテキストハンドル
@@ -49,9 +50,7 @@ protected:
 		int onActive;
 	}enemy_bullet;				//敵が使う弾の構造体。
 
-public :
-
-	struct enemy_info{
+	struct enemy_info {
 		float x, y;
 		float dx, dy;
 		float rad_x, rad_y;
@@ -62,6 +61,9 @@ public :
 		int	anim_count, timecnt, actioncnt;
 		int MAX_Tcnt;
 	}enemy;
+public :
+
+	
 
 
 	//共有メソッド
@@ -77,12 +79,14 @@ public :
 	
 	int enemy_scroll(int, int);
 	int bullet_scroll(int, int);
+
+	void EnemyID(int a) { enemyID = a; }
+	int EnemyID() { return enemyID; }
 	
 	
 	//派生するメソッド 中身は空でいい
 	virtual int init(){ return 0; }
 	virtual int move_enemy(){ return 0; }
-	virtual int spawn_enemy(){ return 0; }
 
 
 //デストラクタは仮想

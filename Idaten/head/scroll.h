@@ -28,8 +28,14 @@ public:
 		stageNum = sNum;
 		BackMoveX = 0;
 		BackMoveY = 0;
-		Backimg_x = 0;
-		Backimg_y = 0;
+		if (sNum == Stage1) {
+			Backimg_x = 0;
+			Backimg_y = -(30 * CHIP_SIZE - 350);
+		}
+		else if (sNum == Stage2) {
+			Backimg_x = 0;
+			Backimg_y = -(44 * CHIP_SIZE - 350);
+		}
 
 	}
 

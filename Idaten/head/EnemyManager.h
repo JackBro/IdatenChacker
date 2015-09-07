@@ -2,6 +2,8 @@
 
 #include<Windows.h>
 #include<memory>
+#include<vector>
+
 #include"Enemy.h"//スーパークラス
 
 //以下サブ
@@ -59,31 +61,32 @@ private:
 
 	HDC enemyhdc;	//デバイスコンテキストハンドル(Mainloopによりその都度更新される)
 
-	player_info *plstats;	//敵に渡すキャラのデータのコピー(Main->EnemyManager->Enemy)
+	player_info *plstats;	//敵に渡すキャラのデータ(Main->EnemyManager->Enemy)
 
 	int scroll_x, scroll_y;		//スクロール量を敵の座標に反映させる
 	int maps_x, maps_y;			//ステージの座標を格納しておく。　スクロールによって可変される座標値を取るため
+	int MaxEnemy;				//敵の最大数
 	int deadflg;				//キャラクターが死亡したという情報をもつ。（関数でI/Oする）
+
 
 	//出現座標格納用配列
 	int spawnpoint[2];
-
-	int map1_spawnpoint[3][2];	//マップ１用
-
-	//メソッド
-
-	//int getMapID();			//マップIDの取得<未使用>
+	std::vector<std::vector<int>>Stage_Spawnpoint;			//ステージ上の出現座標を格納しておく
+	
+	int stageID;											//コンストラクタからステージの番号を取得する
 
 	int SpawnEnemy();		//敵の生成
 	int GetSpawnPoint(int);	//敵の出現ポイントを指定する。
-		void SetSpawnPoint();	//敵の出現ポイントを初期化しておく。
+	void SetSpawnPoint();	//敵の出現ポイントを初期化しておく。
 
-		const int SpawnInterval = ENEMY_SPAWN_INTERVAL;		//リスポーンするまでのインターバル
+	const int SpawnInterval = ENEMY_SPAWN_INTERVAL;		//リスポーンするまでのインターバル
 
-		
+	std::vector<int>SpawnList;							//どこの敵を次に出現させるかを入れておくオーダーリスト
+
 public:
 
-std::unique_ptr<Enemy>eobj[ENEMYMAX];
+	std::vector<std::unique_ptr<Enemy>>eobj;
+//std::unique_ptr<Enemy>*eobj;
 
 int chara_strc(player_info *tp);	//マネージャからキャラのステータスを格納する
 
@@ -96,6 +99,7 @@ int GetDeadflag(int);		//値をセットするが０か１のみ(deadflgへ)代入可能
 
 	void MainLoop(HDC);
 	EnemyManager();
+	EnemyManager(int);
 	~EnemyManager();
 };
 

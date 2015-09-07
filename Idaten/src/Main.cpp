@@ -262,17 +262,15 @@ int Paint(HDC hdc)
 			cc = Get_Key(cc);
 			if (cc == 1){
 				SceneChanger();
-				eobj = new(EnemyManager);
-				iobj = new(ItemManager);
-				scrobj = new(Scroll);
+				eobj = new EnemyManager(SceneNum);
+				iobj = new ItemManager(SceneNum);
+				scrobj = new Scroll(SceneNum);
 				blobj = new(Block);
 				paint_player_obj = new(PAINT);
 				//oilobj = new(OIL);
 				//paint_player_obj->obj2 = new(MOVE);
 				
 				tobj = new(Timer);
-				scrobj->Backimg_x = 0;
-				scrobj->Backimg_y = -(30 * CHIP_SIZE - 350);
 			
 			}
 		}
@@ -289,13 +287,13 @@ int Paint(HDC hdc)
 			scrobj = new Scroll(SceneNum);
 
 			delete blobj;
-			blobj = new(Block);
+			blobj = new (Block);
 			
 			delete eobj;
-			eobj = new(EnemyManager);
+			eobj = new EnemyManager(SceneNum);
 			
 			delete iobj;
-			iobj = new(ItemManager);
+			iobj = new ItemManager(SceneNum);
 
 			scrobj->Backimg_x = 0;
 			scrobj->Backimg_y = 0;
@@ -318,7 +316,7 @@ int Paint(HDC hdc)
 		SceneNum++;
 		SceneNum *= -1;
 		cc = 0;
-		DebugStringVal("%d", SceneNum, hdc, 200, 200, 20);
+	//	DebugStringVal("%d", SceneNum, hdc, 200, 200, 20);
 
 		return 0;
 
@@ -403,7 +401,6 @@ int Paint(HDC hdc)
 		
 	}
 	cc++;
-	DebugStringVal("%d", SceneNum, hdc, 20 * SceneNum + 200, 200, 20);
 	return 0;
 }
 

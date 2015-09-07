@@ -49,7 +49,7 @@ int Enemy01::move_enemy(){
 				enemy_bullet.y -= enemy_bullet.dy;
 
 
-				if (enemy_bullet.y > 500){
+				if (enemy_bullet.y > enemy.y + 100) {
 					enemy.onActive = 1;
 					enemy_bullet.onActive = 0;
 				}

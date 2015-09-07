@@ -36,7 +36,7 @@
 
 //“G
 #define ENEMYMAX 4
-#define ENEMY_SPAWN_INTERVAL 200
+#define ENEMY_SPAWN_INTERVAL 100
 
 //ƒAƒCƒeƒ€
 #define ITEM_SPAWN_INTERVAL 80
