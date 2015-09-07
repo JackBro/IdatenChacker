@@ -5,6 +5,7 @@
 #include<memory>
 #include"debugmsg.h"
 #include"Option.h"
+#include<vector>
 
 
 
@@ -31,7 +32,10 @@ class Block{
 	HBITMAP flag = (HBITMAP)LoadImage(NULL, TEXT("flag.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
 
-	char MAPDATA[MAP_HEIGHT][MAP_WIDTH];
+	//char MAPDATA[MAP_HEIGHT][MAP_WIDTH];
+	//char MAPDATA2[STAGE2_HEIGHT][STAGE2_WIDTH];
+
+	std::vector<std::vector<char>>MAPDATA;
 	
 	float MapDrawPointX, MapDrawPointY;		// 描画するマップ座標値
 	float DrawMapChipX, DrawMapChipY;	// 描画するマップチップの数
@@ -47,7 +51,10 @@ public:
 		Init_block();
 		
 	};
-
+	Block(int n){
+		s1 = n;
+		Init_block();
+	}
 	int block_scroll(int, int);
 
 	~Block(){
@@ -60,6 +67,7 @@ public:
 	player_info *plstats;
 	float block_kansu(HDC);
 	void CharMove();
+	int s1;
 	Block(BYTE * key){
 		key_buff[0] = *key;
 	}

@@ -265,7 +265,7 @@ int Paint(HDC hdc)
 				eobj = new EnemyManager(SceneNum);
 				iobj = new ItemManager(SceneNum);
 				scrobj = new Scroll(SceneNum);
-				blobj = new(Block);
+				blobj = new Block(SceneNum);
 				paint_player_obj = new(PAINT);
 				//oilobj = new(OIL);
 				//paint_player_obj->obj2 = new(MOVE);
@@ -287,8 +287,7 @@ int Paint(HDC hdc)
 			scrobj = new Scroll(SceneNum);
 
 			delete blobj;
-			blobj = new (Block);
-			
+			blobj = new Block(SceneNum);
 			delete eobj;
 			eobj = new EnemyManager(SceneNum);
 			
