@@ -16,7 +16,6 @@ EnemyManager::EnemyManager()
 		SpawnList.push_back(i);
 	}
 
-
 }
 EnemyManager::EnemyManager(int num)
 {
@@ -48,15 +47,11 @@ EnemyManager::~EnemyManager()
 int EnemyManager::SpawnEnemy(){
 	if (eobj.size() >= MaxEnemy) 
 		return -1;		//例外処理
-
-
-	
 		
 		srand((int)time(NULL));
 		GetSpawnPoint(SpawnList[0]);
-		
 
-		int ran = rand() % MaxEnemy + 1;
+		int ran = rand() % 3 + 1;
 
 		switch (ran) {
 		case 1:
@@ -122,15 +117,17 @@ void EnemyManager::MainLoop(HDC hdc){
 	}
 	
 	cnt++;
-/*
+
 	if(SpawnList.empty()){}
 	else
 		DebugStringVal("%d", SpawnList[0], hdc, 200, 200, 20);
-		*/
+		
 
 
 	//敵の移動。キャラとの判定。消滅など。
-	for (int i = 0; i < eobj.size(); i++){
+ 	for (int i = 0; i < eobj.size(); i++){
+		DebugStringVal("Call=%d", i, hdc, 100, 50 + (10 * i), 15);
+
 			eobj[i]->chara_strc(plstats);
 			eobj[i]->move_enemy();
 			eobj[i]->enemy_scroll(scroll_x, scroll_y);

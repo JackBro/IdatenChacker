@@ -295,8 +295,6 @@ int Paint(HDC hdc)
 			delete iobj;
 			iobj = new ItemManager(SceneNum);
 
-			scrobj->Backimg_x = 0;
-			scrobj->Backimg_y = 0;
 		}
 	}
 	else if (SceneNum == Stage1 || SceneNum == Stage2){
