@@ -82,8 +82,10 @@ public :
 
 	void EnemyID(int a) { enemyID = a; }
 	int EnemyID() { return enemyID; }
-	
-	
+
+	float Enemy_x();
+	float Enemy_y();
+
 	//派生するメソッド 中身は空でいい
 	virtual int init(){ return 0; }
 	virtual int move_enemy(){ return 0; }

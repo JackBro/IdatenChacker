@@ -71,3 +71,10 @@ int Itemclass::item_scroll(int x, int y){
 	item.y += y;
 	return 0;
 }
+
+float Itemclass::Item_x() {
+	return item.x;
+}
+float Itemclass::Item_y() {
+	return item.y;
+}

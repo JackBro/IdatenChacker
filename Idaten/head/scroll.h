@@ -6,10 +6,10 @@
 
 class Scroll{
 
-	HBITMAP hb_all = (HBITMAP)LoadImage(NULL, TEXT("bg.bmp"), IMAGE_BITMAP,
-		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
+	HBITMAP hb_all;	// ビットマップハンドル
 	int stageNum;
-	
+	int blMaxvol_x;
+	int blMaxvol_y;
 public:
 
 	player_info *plstats;
@@ -26,15 +26,21 @@ public:
 
 	Scroll(int sNum){
 		stageNum = sNum;
-		BackMoveX = 0;
-		BackMoveY = 0;
 		if (sNum == Stage1) {
 			Backimg_x = 0;
 			Backimg_y = -(30 * CHIP_SIZE - 350);
+			blMaxvol_x = MAP_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
+			blMaxvol_y = MAP_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE - 90;
+			hb_all = (HBITMAP)LoadImage(NULL, TEXT("bg.bmp"), IMAGE_BITMAP,
+				0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		}
 		else if (sNum == Stage2) {
 			Backimg_x = 0;
-			Backimg_y = -(44 * CHIP_SIZE - 350);
+			Backimg_y = -(48 * CHIP_SIZE - 350);
+			blMaxvol_x = STAGE2_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
+			blMaxvol_y = STAGE2_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE;
+			hb_all = (HBITMAP)LoadImage(NULL, TEXT("bg2.bmp"), IMAGE_BITMAP,
+				0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		}
 
 	}

@@ -34,6 +34,9 @@ public:
 		int item_scroll(int, int);
 		int getItemtype(){ return itemtype; }
 		int get_onActive(){ return item.onActive; }
+		float Item_x();
+		float Item_y();
+
 
 	Itemclass();
 	virtual	~Itemclass();

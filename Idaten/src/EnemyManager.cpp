@@ -117,30 +117,32 @@ void EnemyManager::MainLoop(HDC hdc){
 	}
 	
 	cnt++;
-
+/*
 	if(SpawnList.empty()){}
 	else
 		DebugStringVal("%d", SpawnList[0], hdc, 200, 200, 20);
-		
+	*/	
 
 
 	//敵の移動。キャラとの判定。消滅など。
- 	for (int i = 0; i < eobj.size(); i++){
-		DebugStringVal("Call=%d", i, hdc, 100, 50 + (10 * i), 15);
+	for (int i = 0; i < eobj.size(); i++) {
+		//	DebugStringVal("Call=%d", i, hdc, 100, 50 + (10 * i), 15);
+		int ex = eobj[i]->Enemy_x(), ey = eobj[i]->Enemy_y();
+		eobj[i]->enemy_scroll(scroll_x, scroll_y);
+		eobj[i]->bullet_scroll(scroll_x, scroll_y);
 
+		if (ex > 0 && ey > 0 && ex < WINDOW_WIDTH && ey < WINDOW_HEIGHT) {
 			eobj[i]->chara_strc(plstats);
 			eobj[i]->move_enemy();
-			eobj[i]->enemy_scroll(scroll_x, scroll_y);
-			eobj[i]->bullet_scroll(scroll_x, scroll_y);
 			eobj[i]->Enemy_paint(hdc);
-			
+
 			//敵からの死亡フラグを得る
-			if (eobj[i]->get_deadflg()){
+			if (eobj[i]->get_deadflg()) {
 				GetDeadflag(eobj[i]->get_deadflg());
 			}
 
 			//敵が消滅したらオブジェクトを外す　//メモリはユニークポインタが開放してくれる
-			if (eobj[i]->get_onActive() == 0){
+			if (eobj[i]->get_onActive() == 0) {
 				SpawnList.push_back(eobj[i]->EnemyID());
 				cnt = 0;
 				eobj.erase(eobj.begin() + i);
@@ -148,6 +150,7 @@ void EnemyManager::MainLoop(HDC hdc){
 				break;
 			}
 		}
+	}
 }
 
 
@@ -177,19 +180,19 @@ void EnemyManager::SetSpawnPoint() {
 	}
 	else if (stageID == Stage2) {
 		int xy[13][2] = {
-			{ 22 * CHIP_SIZE, 42 * CHIP_SIZE },
-			{ 37 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 106 * CHIP_SIZE, 29 * CHIP_SIZE },
-			{ 112 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 126 * CHIP_SIZE, 3 * CHIP_SIZE },
-			{ 154 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 164 * CHIP_SIZE, 3 * CHIP_SIZE },
-			{ 167 * CHIP_SIZE, 18 * CHIP_SIZE },
-			{ 196 * CHIP_SIZE, 29 * CHIP_SIZE },
-			{ 210 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 217 * CHIP_SIZE, 22 * CHIP_SIZE },
-			{ 243 * CHIP_SIZE, 31 * CHIP_SIZE },
-			{ 279 * CHIP_SIZE, 13 * CHIP_SIZE }
+			{ 22 * CHIP_SIZE, 41 * CHIP_SIZE },
+			{ 37 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 106 * CHIP_SIZE, 28 * CHIP_SIZE },
+			{ 112 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 126 * CHIP_SIZE, 2 * CHIP_SIZE },
+			{ 154 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 164 * CHIP_SIZE, 2 * CHIP_SIZE },
+			{ 167 * CHIP_SIZE, 17 * CHIP_SIZE },
+			{ 196 * CHIP_SIZE, 28 * CHIP_SIZE },
+			{ 210 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 217 * CHIP_SIZE, 21 * CHIP_SIZE },
+			{ 243 * CHIP_SIZE, 30 * CHIP_SIZE },
+			{ 279 * CHIP_SIZE, 12 * CHIP_SIZE }
 		};
 		std::vector<int>n;
 		for (int j = 0; j < 13; j++) {

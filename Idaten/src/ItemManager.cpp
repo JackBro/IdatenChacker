@@ -71,21 +71,23 @@ void ItemManager::MainLoop(HDC hdc){
 	//DebugStringVal("%d", cnt, hdc, 100, 80, 20);
 
 	//敵の移動。キャラとの判定。消滅など。
-	for (int i = 0; i < iobj.size(); i++){
-
+	for (int i = 0; i < iobj.size(); i++) {
+		int ix = iobj[i]->Item_x(), iy = iobj[i]->Item_y();
+		iobj[i]->item_scroll(scroll_x, scroll_y);
+		if (ix > -30 && iy > -30 && ix < WINDOW_WIDTH + 30 && iy < WINDOW_HEIGHT + 30) {
 			iobj[i]->chara_strc(plstats);
-			iobj[i]->item_scroll(scroll_x, scroll_y);
-			 itemtype = iobj[i]->hit_itemcheck();
+			itemtype = iobj[i]->hit_itemcheck();
 			iobj[i]->Item_paint(hdc);
 
 			//アイテムが消滅したらオブジェクトを外す　//メモリはユニークポインタが開放してくれる
-			if (iobj[i]->get_onActive() == 0){
+			if (iobj[i]->get_onActive() == 0) {
 				SpawnList.push_back(iobj[i]->ItemID());
 				cnt = -SpawnInterval;
 				iobj.erase(iobj.begin() + i);
 				break;
 			}
-		}	
+		}
+	}
 }
 
 
@@ -115,19 +117,19 @@ void ItemManager::SetSpawnPoint(){
 	}
 	else if (stageID == Stage2) {
 		int xy[13][2] = {
-			{ 42 * CHIP_SIZE, 35 * CHIP_SIZE },
-			{ 59 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 69 * CHIP_SIZE, 23 * CHIP_SIZE },
-			{ 85 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 86 * CHIP_SIZE, 20 * CHIP_SIZE },
-			{ 86 * CHIP_SIZE, 10 * CHIP_SIZE },
-			{ 106 * CHIP_SIZE, 41 * CHIP_SIZE },
-			{ 129 * CHIP_SIZE, 46 * CHIP_SIZE },
-			{ 145 * CHIP_SIZE, 42 * CHIP_SIZE },
-			{ 188 * CHIP_SIZE, 17 * CHIP_SIZE },
-			{ 205 * CHIP_SIZE, 41 * CHIP_SIZE },
-			{ 213 * CHIP_SIZE, 12 * CHIP_SIZE },
-			{ 271 * CHIP_SIZE, 31 * CHIP_SIZE }
+			{ 42 * CHIP_SIZE, 34 * CHIP_SIZE },
+			{ 59 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 69 * CHIP_SIZE, 22 * CHIP_SIZE },
+			{ 85 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 86 * CHIP_SIZE, 19 * CHIP_SIZE },
+			{ 86 * CHIP_SIZE, 9 * CHIP_SIZE },
+			{ 106 * CHIP_SIZE, 40 * CHIP_SIZE },
+			{ 129 * CHIP_SIZE, 45 * CHIP_SIZE },
+			{ 145 * CHIP_SIZE, 41 * CHIP_SIZE },
+			{ 188 * CHIP_SIZE, 16 * CHIP_SIZE },
+			{ 205 * CHIP_SIZE, 40 * CHIP_SIZE },
+			{ 213 * CHIP_SIZE, 11 * CHIP_SIZE },
+			{ 271 * CHIP_SIZE, 30 * CHIP_SIZE }
 		};
 		std::vector<int>n;
 		for (int j = 0; j < 13; j++) {

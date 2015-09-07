@@ -110,6 +110,7 @@ class ItemManager{
 		int GetItemtype(){ return itemtype; }
 		int GetItemtype(int);
 
+
 	ItemManager();
 	ItemManager(int);
 	~ItemManager();

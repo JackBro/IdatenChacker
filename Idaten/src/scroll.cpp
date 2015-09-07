@@ -8,22 +8,6 @@ float Scroll::scroll_kansu(HDC hdc)
 	BackMoveX = 0;
 	BackMoveY = 0;
 
-	int blMaxvol_x;
-	int blMaxvol_y;
-
-
-		if (stageNum == Stage2){
-			blMaxvol_x = STAGE2_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
-			blMaxvol_y = STAGE2_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE - 90;
-
-		}
-		else{
-			blMaxvol_x = MAP_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
-			blMaxvol_y = MAP_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE - 90;
-		}
-	
-
-
 		if (plstats->x > 630){
 			if (plstats->vx > 0){
 				if (-(Backimg_x) >= blMaxvol_x){}
@@ -99,7 +83,7 @@ float Scroll::scroll_kansu(HDC hdc)
 	Backimg_x += BackMoveX;
 	Backimg_y += BackMoveY;
 
-	BitBlt(hdc, (int)Backimg_x, (int)Backimg_y, MAP_WIDTH * CHIP_SIZE, MAP_HEIGHT * CHIP_SIZE, hdc_work, 0, 1000, SRCCOPY);
+	BitBlt(hdc, (int)Backimg_x, (int)Backimg_y, STAGE2_WIDTH * CHIP_SIZE, STAGE2_HEIGHT * CHIP_SIZE, hdc_work, 0, 1000, SRCCOPY);
 
 	/*DebugStringVal("A%d", MAP_HEIGHT * CHIP_SIZE, hdc, 100, 200, 20);
 	DebugStringVal("A%d", MAP_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE-90, hdc, 100, 220, 20);

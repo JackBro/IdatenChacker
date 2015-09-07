@@ -120,3 +120,11 @@ int Enemy::bullet_scroll(int x, int y){
 	}
 	return 0;
 }
+
+float Enemy::Enemy_x() {
+	return enemy.x;
+}
+
+float Enemy::Enemy_y() {
+	return enemy.y;
+}

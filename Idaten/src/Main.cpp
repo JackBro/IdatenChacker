@@ -288,12 +288,14 @@ int Paint(HDC hdc)
 
 			delete blobj;
 			blobj = new Block(SceneNum);
+
 			delete eobj;
 			eobj = new EnemyManager(SceneNum);
 			
 			delete iobj;
 			iobj = new ItemManager(SceneNum);
-
+			paint_player_obj->obj2->player.x = 120;
+			paint_player_obj->obj2->player.y = 420;
 		}
 	}
 	else if (SceneNum == Stage1 || SceneNum == Stage2){
