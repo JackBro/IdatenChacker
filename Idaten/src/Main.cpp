@@ -37,6 +37,7 @@ int Init_Game();
 int Get_Key(int);
 int SceneChanger();
 
+
 #define KEY_SPACE 32
 
 //HBITMAP title_hb;	// ビットマップハンドル
@@ -61,7 +62,8 @@ Scroll *scrobj;
 Block *blobj;
 EnemyManager *eobj;
 ItemManager *iobj;
-Timer *tobj;
+Timer *timeobj;
+
 
 /////メイン関数///////////////////////////////////////////////////////////////////////////////////////////
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -154,8 +156,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_back, 0, 0, SRCCOPY);
 
 
-
-
 		EndPaint(hWnd, &ps);			// 描画の終了
 		return 0;
 
@@ -215,7 +215,6 @@ int Init_Game(){
 
 	SceneNum = Title;
 
-	
 
 	return 0;
 }
@@ -252,9 +251,9 @@ Player　Paint
 
 */
 
+
 int Paint(HDC hdc)
 {
-	
 	static int cc;
 	if (SceneNum == Title){
 		Paint_BG(hdc,Title);		// 背景描画関数へ
@@ -269,8 +268,10 @@ int Paint(HDC hdc)
 				paint_player_obj = new(PAINT);
 				//oilobj = new(OIL);
 				//paint_player_obj->obj2 = new(MOVE);
-				
-				tobj = new(Timer);
+
+				timeobj = new(Timer);
+				timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
+			
 			
 			}
 		}
@@ -374,8 +375,8 @@ int Paint(HDC hdc)
 	paint_player_obj->char_strc(&paint_player_obj->obj2->player);
 	paint_player_obj->Paint_Player(hdc);
 
-	tobj->MainTimer(hdc);
-
+	timeobj->StartTimer(hdc);	//プログラムが開始された時の時間の習得
+	
 	}
 	else if (SceneNum == Boss) {
 		if (cc > 10) {
@@ -384,7 +385,8 @@ int Paint(HDC hdc)
 		}
 	}
 	else if (SceneNum == End){
-		Paint_BG(hdc,End);
+		Paint_BG(hdc,End);  //ed
+		timeobj->ShowTime(hdc);//タイム描画
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
@@ -394,7 +396,7 @@ int Paint(HDC hdc)
 				delete scrobj;
 				delete blobj;
 				delete paint_player_obj;
-				delete tobj;
+				delete timeobj;
 			}
 		}
 		
