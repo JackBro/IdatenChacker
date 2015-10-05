@@ -11,14 +11,12 @@
 #include"Block.h"
 #include"Option.h"
 #include"timer.h"
-
+#include"Ranking.h"
 
 //chara
 //#include"Player_Status.h"
 #include "Paint_Player.h"
 //#include "Player_Move.h"
-
-
 
 #include"player_info.h"
 
@@ -36,6 +34,9 @@ int Paint_BG(HDC,int);
 int Init_Game();
 int Get_Key(int);
 int SceneChanger();
+DWORD S_time;		
+int r_time[5];		//既存のタイム
+int now_time[5];	//現在のタイム
 
 
 #define KEY_SPACE 32
@@ -70,6 +71,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	WNDCLASS wc;
 	MSG msg;
+	
 
 	// ウインドウクラス構造体
 	ZeroMemory(&wc, sizeof(WNDCLASS));
@@ -103,6 +105,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// ウインドウの表示
 	ShowWindow(hWnd, nCmdShow);                         // 表示状態の設定
 	UpdateWindow(hWnd);                                 // クライアント領域の更新
+	
+	
+	
+
+	
 
 	// メッセージループ
 	while (true)
@@ -151,6 +158,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		hdc = BeginPaint(hWnd, &ps);	// 描画の開始
 		Paint(hdc_back);				// Paint関数へ
+	
+		
 
 		//バックバッファに保存された画像を表画面に描画
 		BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_back, 0, 0, SRCCOPY);
@@ -257,6 +266,7 @@ int Paint(HDC hdc)
 	static int cc;
 	if (SceneNum == Title){
 		Paint_BG(hdc,Title);		// 背景描画関数へ
+		
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
@@ -271,7 +281,8 @@ int Paint(HDC hdc)
 
 				timeobj = new(Timer);
 				timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
-			
+				
+
 			
 			}
 		}
@@ -303,80 +314,81 @@ int Paint(HDC hdc)
 		paint_player_obj->obj2->C_sts(paint_player_obj->obj->c_sts, &paint_player_obj->obj->Oil_Gage);
 		paint_player_obj->obj2->Move();
 
-	//Scroll
-	scrobj->toPoint(&paint_player_obj->obj2->player);
-	scrobj->scroll_kansu(hdc);
+		//Scroll
+		scrobj->toPoint(&paint_player_obj->obj2->player);
+		scrobj->scroll_kansu(hdc);
+		//Block
+		blobj->toPoint(&paint_player_obj->obj2->player);
+		blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
+		int aa = 0;
+		aa = blobj->block_kansu(hdc);	//値を受け取っていたら次へ
+		if (aa == 2){
+			SceneNum++;
+			SceneNum *= -1;
+			cc = 0;
+			//	DebugStringVal("%d", SceneNum, hdc, 200, 200, 20);
 
-	//Block
-	blobj->toPoint(&paint_player_obj->obj2->player);
-	blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
-	int aa = 0;
-	aa = blobj->block_kansu(hdc);	//値を受け取っていたら次へ
-	if (aa == 2){
-		SceneNum++;
-		SceneNum *= -1;
-		cc = 0;
-	//	DebugStringVal("%d", SceneNum, hdc, 200, 200, 20);
+			return 0;
 
-		return 0;
-
-	}
-
-
-	//Enemy
-	//-----------------------------
-	eobj->chara_strc(&paint_player_obj->obj2->player);
-	eobj->enemy_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
-	eobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
-	eobj->MainLoop(hdc);
-
-	paint_player_obj->obj->Item(eobj->GetDeadflag());		//アイテムを取得してゲージに変化があるか判断する(敵の場合は－１される）
-
-	eobj->GetDeadflag(0);
-
-	//オイルゲージ量など更新処理
-	paint_player_obj->obj->Player_Sts();
-	paint_player_obj->obj->Oil_Sts();
+		}
 
 
-	//Item
-	iobj->chara_strc(&paint_player_obj->obj2->player);
-	iobj->item_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
-	iobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
-	iobj->MainLoop(hdc);
+		//Enemy
+		//-----------------------------
+		eobj->chara_strc(&paint_player_obj->obj2->player);
+		eobj->enemy_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
+		eobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
+		eobj->MainLoop(hdc);
 
-	paint_player_obj->obj->Item(iobj->GetItemtype());		//アイテムを取得してゲージに変化があるか判断する
-//	DebugStringVal("%d", iobj->GetItemtype(), hdc, 300, 30, 20);
+		paint_player_obj->obj->Item(eobj->GetDeadflag());		//アイテムを取得してゲージに変化があるか判断する(敵の場合は－１される）
 
-	iobj->GetItemtype(0);	//値の初期化。　しないとバグが出ます＾ｑ＾
-	
-	//オイルゲージ量など更新処理
-	paint_player_obj->obj->Player_Sts();
-	paint_player_obj->obj->Oil_Sts();
+		eobj->GetDeadflag(0);
 
-
-	//オイルとそのゲージの描画
-	paint_player_obj->obj->Paint_Oil(hdc);
-	paint_player_obj->obj->Paint_Gage(hdc);
+		//オイルゲージ量など更新処理
+		paint_player_obj->obj->Player_Sts();
+		paint_player_obj->obj->Oil_Sts();
 
 
-	//移動量の最大値の抑制
-	if (paint_player_obj->obj2->player.vx < -10)paint_player_obj->obj2->player.vx = -10;
-	if (paint_player_obj->obj2->player.vy > 10)	paint_player_obj->obj2->player.vy = 10;
+		//Item
+		iobj->chara_strc(&paint_player_obj->obj2->player);
+		iobj->item_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
+		iobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
+		iobj->MainLoop(hdc);
 
-	paint_player_obj->obj2->player.x += paint_player_obj->obj2->player.vx;
-	paint_player_obj->obj2->player.y += paint_player_obj->obj2->player.vy;
+		paint_player_obj->obj->Item(iobj->GetItemtype());		//アイテムを取得してゲージに変化があるか判断する
+		//	DebugStringVal("%d", iobj->GetItemtype(), hdc, 300, 30, 20);
 
-	//キャラが画面座標０より外へ出ないように抑制
-	if (paint_player_obj->obj2->player.x < 0)	paint_player_obj->obj2->player.x = 0;
-	if (paint_player_obj->obj2->player.y < 0)	paint_player_obj->obj2->player.y = 0;
-//	DebugStringFloat("%f",paint_player_obj->obj2->player.y,hdc,200,200,20);
-	//以下描画処理
-	paint_player_obj->char_strc(&paint_player_obj->obj2->player);
-	paint_player_obj->Paint_Player(hdc);
+		iobj->GetItemtype(0);	//値の初期化。　しないとバグが出ます＾ｑ＾
 
-	timeobj->StartTimer(hdc);	//プログラムが開始された時の時間の習得
-	
+		//オイルゲージ量など更新処理
+		paint_player_obj->obj->Player_Sts();
+		paint_player_obj->obj->Oil_Sts();
+
+
+		//オイルとそのゲージの描画
+		paint_player_obj->obj->Paint_Oil(hdc);
+		paint_player_obj->obj->Paint_Gage(hdc);
+
+
+		//移動量の最大値の抑制
+		if (paint_player_obj->obj2->player.vx < -10)paint_player_obj->obj2->player.vx = -10;
+		if (paint_player_obj->obj2->player.vy > 10)	paint_player_obj->obj2->player.vy = 10;
+
+		paint_player_obj->obj2->player.x += paint_player_obj->obj2->player.vx;
+		paint_player_obj->obj2->player.y += paint_player_obj->obj2->player.vy;
+
+		//キャラが画面座標０より外へ出ないように抑制
+		if (paint_player_obj->obj2->player.x < 0)	paint_player_obj->obj2->player.x = 0;
+		if (paint_player_obj->obj2->player.y < 0)	paint_player_obj->obj2->player.y = 0;
+		//	DebugStringFloat("%f",paint_player_obj->obj2->player.y,hdc,200,200,20);
+		//以下描画処理
+		paint_player_obj->char_strc(&paint_player_obj->obj2->player);
+		paint_player_obj->Paint_Player(hdc);
+
+		timeobj->StartTimer(hdc);	//プログラムが開始された時の時間の習得
+		timeobj->ShowTime(hdc);
+
+		
 	}
 	else if (SceneNum == Boss) {
 		if (cc > 10) {
@@ -387,6 +399,8 @@ int Paint(HDC hdc)
 	else if (SceneNum == End){
 		Paint_BG(hdc,End);  //ed
 		timeobj->ShowTime(hdc);//タイム描画
+		Ranking_Load();		//ランキングロード
+		Ranking_save(hdc);
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
