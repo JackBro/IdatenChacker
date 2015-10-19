@@ -34,9 +34,10 @@ int Paint_BG(HDC,int);
 int Init_Game();
 int Get_Key(int);
 int SceneChanger();
-DWORD S_time;		
-int r_time[5];		//既存のタイム
-int now_time[5];	//現在のタイム
+DWORD S_time;		//現在のタイム
+//int r_time[5];		//既存のタイム
+char namae[15];
+
 
 
 #define KEY_SPACE 32

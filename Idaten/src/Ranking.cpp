@@ -74,11 +74,12 @@ void Ranking_save(HDC hdc)
 		}
 
 			fprintf(fp, "1ˆÊ %d•b\n", r_time[0]);
-			DebugStringVal("1ˆÊ %d•b",r_time[0], hdc, 380, 30 * (1 + 3), 30, 1);
+			DebugStringColor("1ˆÊ %f•b",r_time[0], hdc, 500, 65 * (2 + 3), 30, 0, 0, 0);
+
 			fprintf(fp, "2ˆÊ %d•b\n", r_time[1]);
-			DebugStringVal("2ˆÊ %d•b", r_time[1], hdc, 380, 30 * (2 + 3), 30, 1);
+			DebugStringColor("2ˆÊ %f•b", r_time[1], hdc, 500, 65 * (2 + 4), 30, 0, 0, 0);
 			fprintf(fp, "3ˆÊ %d•b\n", r_time[2]);
-			DebugStringVal("3ˆÊ %d•b", r_time[2], hdc, 380, 30 * (3+ 3), 30, 1);
+			DebugStringColor("3ˆÊ %f•b", r_time[2], hdc, 500, 65 * (2 + 5), 30, 0, 0, 0);
 		
 	fclose(fp);
 }
