@@ -7,8 +7,8 @@
 
 
 //—v‘f
-#include "EnemyManager.h"
-#include "ItemManager.h"
+#include "Enemy\EnemyManager.h"
+#include "Item\ItemManager.h"
 #include"scroll.h"
 #include"Block.h"
 #include"timer.h"

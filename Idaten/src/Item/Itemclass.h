@@ -1,6 +1,6 @@
 #pragma once
 #include<Windows.h>
-#include"player_info.h"
+#include"../player_info.h"
 
 class Itemclass{
 protected:

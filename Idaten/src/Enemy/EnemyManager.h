@@ -18,10 +18,10 @@
 
 
 //キャラのクラス（仮	値をどう受け取るかはまだ不明なので（仮）
-#include"player_info.h"
-#include"Option.h"
+#include"../player_info.h"
+#include"../Option.h"
 //debug用
-#include"debugmsg.h"
+#include"../debugmsg.h"
 
 
 

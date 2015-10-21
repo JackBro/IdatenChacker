@@ -5,10 +5,10 @@
 #include <math.h>	
 #include <time.h>   
 
-#include"player_info.h"
+#include"../player_info.h"
 
-#include"debugmsg.h"
-#include"Option.h"
+#include"../debugmsg.h"
+#include"../Option.h"
 
 
 /*
