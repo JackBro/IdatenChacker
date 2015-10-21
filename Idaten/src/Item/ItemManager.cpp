@@ -171,3 +171,8 @@ int ItemManager::GetItemtype(int a){
 	}
 	return 0;
 }
+
+void ItemManager::MainThread(HDC hdc) {
+	std::thread t1(&ItemManager::MainLoop, this, hdc);
+	t1.join();
+}

@@ -3,6 +3,7 @@
 #include<Windows.h>
 #include<memory>
 #include<vector>
+#include<thread>
 
 #include"Enemy.h"//スーパークラス
 
@@ -96,6 +97,8 @@ int stage_coord(int, int);		//スポーンする座標値が画面からの座標になるためグロー
 
 int GetDeadflag();			//値を取るだけ
 int GetDeadflag(int);		//値をセットするが０か１のみ(deadflgへ)代入可能
+
+void MainThread(HDC);
 
 	void MainLoop(HDC);
 	EnemyManager();

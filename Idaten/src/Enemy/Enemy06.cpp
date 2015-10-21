@@ -6,16 +6,27 @@ Enemy06::Enemy06(int x,int y)
 	enemy.x = x;
 	enemy.y = y;
 	init();
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("enemy06.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	
+	enemy_hbList = new HBITMAP[4];
+
+	enemy_hbList[0] = enemy_hb;
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/2.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/3.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	enemy_hbList[3] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/4.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+	flg = 0;
 }
 
 
 Enemy06::~Enemy06()
 {
 	DeleteObject(enemy_hb);
+	DeleteObject(enemy_hbList);
 }
 
 int Enemy06::init(){
@@ -26,7 +37,7 @@ int Enemy06::init(){
 	enemy.dy = 0;
 
 
-	enemy.width = 40;
+	enemy.width = 50;
 	enemy.height = 50;
 	enemy.step_x = 2;
 	Jump = (rand() % 30 + 1) * 10;
@@ -75,6 +86,17 @@ int Enemy06::move_enemy(){
 	enemy.x += enemy.dx;
 	enemy.y += enemy.dy;
 
+	enemy.anim_count++;
+	if (enemy.anim_count > 10) {
+		enemy_hb = enemy_hbList[enemy.anim_flg];
+		enemy.anim_count = 0;
+		enemy.anim_flg++;
+
+		if (enemy.anim_flg > 3) {
+			enemy.anim_flg = 0;
+		}
+
+	}
 
 	hit_enemycheck();
 	return 0;

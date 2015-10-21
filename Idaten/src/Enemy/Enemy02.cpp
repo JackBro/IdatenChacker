@@ -6,8 +6,16 @@ Enemy02::Enemy02(int x,int y)
 	init();
 	enemy.x = x;
 	enemy.y = y;
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("enemy.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+	enemy_hbList = new HBITMAP[3];
+	enemy_hbList[0] = enemy_hb;
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/2.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/3.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
 
 }
 
@@ -15,14 +23,15 @@ Enemy02::Enemy02(int x,int y)
 Enemy02::~Enemy02()
 {
 	DeleteObject(enemy_hb);
+	DeleteObject(enemy_hbList);
 }
 
 int Enemy02::init(){
 	enemy.base_y = enemy.y;
 	enemy.dx = 0;
 	enemy.dy = 0;
-	enemy.width = 30;
-	enemy.height = 30;
+	enemy.width = 60;
+	enemy.height = 60;
 	enemy.step_x = 4;
 	enemy.step_y = 4;
 	enemy.onActive = 1;
@@ -30,7 +39,9 @@ int Enemy02::init(){
 }
 
 int Enemy02::move_enemy(){
+
 	srand((int)time(NULL));
+//	DebugStringFloat("%d", enemy.x, enemyhdc, 200, 40, 20);
 	if (enemy.onActive == 1){
 		//二点間　視野内にいるかどうか
 		int ex = (int)enemy.x;
@@ -44,6 +55,7 @@ int Enemy02::move_enemy(){
 	}
 	else if (enemy.onActive == 3){
 		//予備動作
+		enemy_hb = enemy_hbList[1];
 		enemy.timecnt++;
 		if (enemy.timecnt > 20){
 			enemy.timecnt = 0;
@@ -57,13 +69,13 @@ int Enemy02::move_enemy(){
 	else if (enemy.onActive == 5){
 		//爆発アニメーション？
 		enemy.timecnt++;
+		enemy_hb = enemy_hbList[2];
+		enemy.x -= 15;
+		enemy.y -= 15;
+		enemy.width += 30;
+		enemy.height += 30;
 
-		enemy.x -= enemy.timecnt/2;
-		enemy.y -= enemy.timecnt/2;
-		enemy.width += enemy.timecnt;
-		enemy.height += enemy.timecnt;
-
-		if (enemy.timecnt > 20){
+		if (enemy.timecnt > 5){
 			enemy.onActive = 0;
 			enemy.timecnt = 0;
 		}

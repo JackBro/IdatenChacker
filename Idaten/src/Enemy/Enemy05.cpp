@@ -6,7 +6,12 @@ Enemy05::Enemy05(int x,int y)
 	init();
 	enemy.x = x;
 	enemy.y = y;
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("enemy.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/dustcloth/1.bmp"), IMAGE_BITMAP,
+		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+	enemy_hbList = new HBITMAP[2];
+	enemy_hbList[0] = enemy_hb;
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/dustcloth/2.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 }
@@ -15,13 +20,14 @@ Enemy05::Enemy05(int x,int y)
 Enemy05::~Enemy05()
 {
 	DeleteObject(enemy_hb);
+	DeleteObject(enemy_hbList);
 }
 
 int Enemy05::init(){
 	
 	enemy.base_y = enemy.y;
-	enemy.width = 40;
-	enemy.height = 50;
+	enemy.width = 60;
+	enemy.height = 60;
 	enemy.step_x = 5;
 	enemy.step_y = 5;
 	enemy.rad_x = 0;
@@ -84,6 +90,14 @@ int Enemy05::move_enemy(){
 	enemy.x += enemy.dx;
 	enemy.y += enemy.dy;
 
+	enemy.anim_count++;
+	if (enemy.anim_count > 10) {
+		enemy_hb = enemy_hbList[enemy.anim_flg];
+		enemy.anim_count = 0;
+		if (enemy.anim_flg) enemy.anim_flg = 0;
+		else enemy.anim_flg = 1;
+
+	}
 
 	hit_enemycheck();
 	return 0;

@@ -37,6 +37,7 @@ protected:
 
 	//“G‚ÌBitmapƒnƒ“ƒhƒ‹
 	HBITMAP enemy_hb;
+	HBITMAP bullet_hb;
 
 	player_info *plstats;
 
@@ -60,7 +61,9 @@ protected:
 		int base_y;
 		int	anim_count, timecnt, actioncnt;
 		int MAX_Tcnt;
+		int anim_flg;
 	}enemy;
+	HBITMAP *enemy_hbList;
 public :
 
 	
@@ -73,6 +76,8 @@ public :
 
 	int hit_enemycheck();		//“G‚Æ‚Ì“–‚½‚è”»’è
 	int hit_enemycheckN();		//“G‚Æ‚Ì“–‚½‚è”»’è‚¾‚ª“G‚ğÁ‹‚µ‚È‚¢B
+	int hit_enemycheckRide();		//“G‚Æ‚Ì“–‚½‚è”»’è‚¾‚ª“G‚Ìã‚Éæ‚ê‚éB
+
 
 	int get_deadflg(){ return DEADflg;	}
 	int get_onActive(){ return enemy.onActive; }

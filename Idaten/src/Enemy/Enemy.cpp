@@ -14,6 +14,7 @@ Enemy::Enemy(){
 	enemy.timecnt = 0;
 	enemy.anim_count = 0;
 	enemy.MAX_Tcnt = 0;
+	enemy.anim_flg = 0;
 
 	enemyID = 0;
 
@@ -25,8 +26,8 @@ int Enemy::enemyPaintBullet(){
 	if (enemy_bullet.onActive == 1){
 		HDC hdc_work;
 		hdc_work = CreateCompatibleDC(enemyhdc);
-		SelectObject(hdc_work, enemy_hb);
-		TransparentBlt(enemyhdc, (int)enemy_bullet.x, (int)enemy_bullet.y, enemy_bullet.width, enemy_bullet.height, hdc_work, 0, 0, enemy_bullet.width, enemy_bullet.height, RGB(0, 0, 255));
+		SelectObject(hdc_work, bullet_hb);
+		TransparentBlt(enemyhdc, (int)enemy_bullet.x, (int)enemy_bullet.y, enemy_bullet.width, enemy_bullet.height, hdc_work, 0, 0, 120, 120, RGB(0, 0, 255));
 		DeleteDC(hdc_work);
 	}
 	return 0;
@@ -45,7 +46,7 @@ int Enemy::Enemy_paint(HDC hdc){
 		int ex = enemy.x;
 		int ey = enemy.y;
 
-		TransparentBlt(hdc, ex, ey, enemy.width, enemy.height, hdc_work, 0, 0, 300, 300, RGB(255, 255, 255));
+		TransparentBlt(hdc, ex, ey, enemy.width, enemy.height, hdc_work, 0, 0, 120, 120 , RGB(0, 0, 255));
 		DeleteDC(hdc_work);
 
 	}
@@ -73,9 +74,11 @@ int Enemy::hit_enemycheck(){
 
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2){
-				if (ey <= ph - 10){
+				if (ey <= ph - 12){
 					DEADflg = -1;//??ÉLÉÉÉâÇ…âeãøÇ∑ÇÈ éÄñSÇÃàµÇ¢ÇÕïsñæÅB
-				}
+				}else
+					plstats->c_flg = 4;
+
 			}
 			
 			enemy.onActive = 0;
@@ -101,6 +104,62 @@ int Enemy::hit_enemycheckN(){
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2)
 				DEADflg = -1;//??ÉLÉÉÉâÇ…âeãøÇ∑ÇÈ éÄñSÇÃàµÇ¢ÇÕïsñæÅB
+		}
+	}
+	return 0;
+}
+
+int Enemy::hit_enemycheckRide() {
+	if (enemy.onActive & 1) {
+		//ìñÇΩÇËîªíËÅ@éläpå`
+		int ex = enemy.x;
+		int ey = enemy.y;
+		int ew = ex + enemy.width;
+		int eh = ey + enemy.height;
+		int px = (int)plstats->x;
+		int py = (int)plstats->y;
+		int pw = px + plstats->width;
+		int ph = py + plstats->height;
+
+		
+		if (ex <= pw && px <= ew && ey <= ph && py <= eh) {
+			if (plstats->c_flg == 3 || plstats->c_flg == 2) {
+				enemy.onActive = 0;//??ÉLÉÉÉâÇ…âeãøÇ∑ÇÈ éÄñSÇÃàµÇ¢ÇÕïsñæÅB
+				return 0;
+			}
+			if (ph - eh < -70 ) { //è„
+				plstats->y = ey - plstats->height - 0.5;
+				plstats->vy = 0;
+				if (plstats->c_flg != 3 && plstats->c_flg != 2) {
+					plstats->c_flg = 0;
+				}
+				return 0;
+			}
+
+			if (eh - py < MAX_LENGTH + (-plstats->vy * 2)) { //â∫
+				if (plstats->c_flg == 5) {
+					plstats->vy = 0;
+				}
+				plstats->y = eh + 1;
+				return 0;
+			}
+
+				if (ew - px < MAX_LENGTH + -plstats->vx * 1.5) {
+					plstats->x = ew;
+					plstats->vx = 0;
+				}
+
+
+				if (plstats->vx > 0) {
+					if (pw - ex < MAX_LENGTH + plstats->vx * 2) {
+						plstats->x = ex - plstats->width;
+						plstats->vx = 0;
+					}
+				}
+
+				DebugStringFloat("%d", pw - ex, enemyhdc, 200, 200, 20);
+
+			//
 		}
 	}
 	return 0;

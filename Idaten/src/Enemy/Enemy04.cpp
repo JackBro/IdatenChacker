@@ -6,7 +6,7 @@ Enemy04::Enemy04(int x,int y)
 	init();
 	enemy.x = x;
 	enemy.y = y;
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("enemy.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/wall/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 }
@@ -15,6 +15,7 @@ Enemy04::Enemy04(int x,int y)
 Enemy04::~Enemy04()
 {
 	DeleteObject(enemy_hb);
+	DeleteObject(enemy_hbList);
 }
 
 int Enemy04::init(){
@@ -23,8 +24,8 @@ int Enemy04::init(){
 	enemy.dy = 0;
 
 	enemy.y -= 150;
-	enemy.width = 40;
-	enemy.height = 100;
+	enemy.width = 80;
+	enemy.height = 80;
 	enemy.step_x = 2;
 	enemy.step_y = 2;
 	enemy.onActive = 1;
@@ -89,6 +90,6 @@ int Enemy04::move_enemy(){
 	enemy.y += enemy.dy;
 	
 
-	hit_enemycheck();
+	hit_enemycheckRide();
 	return 0;
 }

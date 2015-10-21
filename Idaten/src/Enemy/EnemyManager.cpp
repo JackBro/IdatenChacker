@@ -51,8 +51,14 @@ int EnemyManager::SpawnEnemy(){
 		srand((int)time(NULL));
 		GetSpawnPoint(SpawnList[0]);
 
-		int ran = rand() % 3 + 1;
-
+		int ran;
+		if (stageID == Stage1) {
+			ran = rand() % 4 + 1;
+		}
+		else if (stageID == Stage2) {
+			ran = rand() % 6 + 1;
+		}
+//		DebugStringVal("%d", ran, enemyhdc, 100, 40, 20);
 		switch (ran) {
 		case 1:
 		{
@@ -61,28 +67,36 @@ int EnemyManager::SpawnEnemy(){
 			eobj.push_back(std::move(obj));
 			break;
 		}
-		/*
-	case 2:
-	{
-			  std::unique_ptr<Enemy>obj(new Enemy02(spawnpoint[0], spawnpoint[1]));
-			  eobj[i] = std::move(obj);
-			  return 1;		}
-	case 3:
-	{
-			  std::unique_ptr<Enemy>obj(new Enemy03(spawnpoint[0], spawnpoint[1]));
-			  eobj[i] = std::move(obj);
-			  return 1;		}
-	case 4:
-	{
-			  std::unique_ptr<Enemy>obj(new Enemy04(spawnpoint[0], spawnpoint[1]));
-			  eobj[i] = std::move(obj);
-			  return 1;		}
-	case 5:
-	{
-			  std::unique_ptr<Enemy>obj(new Enemy05(spawnpoint[0], spawnpoint[1]));
-			  eobj[i] = std::move(obj);
-			  return 1;		}
-			  */
+		case 5:
+		{
+			
+			std::unique_ptr<Enemy>obj(new Enemy02(spawnpoint[0], spawnpoint[1]));
+			obj->EnemyID(SpawnList[0]);
+			eobj.push_back(std::move(obj));
+			break;
+		}
+			/*
+		case 3:
+		{
+				  std::unique_ptr<Enemy>obj(new Enemy03(spawnpoint[0], spawnpoint[1]));
+				  eobj[i] = std::move(obj);
+				  return 1;		}
+				  */
+		case 6:
+		{
+			std::unique_ptr<Enemy>obj(new Enemy04(spawnpoint[0], spawnpoint[1]));
+			obj->EnemyID(SpawnList[0]);
+			eobj.push_back(std::move(obj));
+			break;
+		}
+
+		case 4:
+		{
+			std::unique_ptr<Enemy>obj(new Enemy05(spawnpoint[0], spawnpoint[1]));
+			obj->EnemyID(SpawnList[0]);
+			eobj.push_back(std::move(obj));
+			break;
+		}			  
 		case 2:
 		{
 			std::unique_ptr<Enemy>obj(new Enemy06(spawnpoint[0], spawnpoint[1]));
@@ -121,7 +135,7 @@ void EnemyManager::MainLoop(HDC hdc){
 	if(SpawnList.empty()){}
 	else
 		DebugStringVal("%d", SpawnList[0], hdc, 200, 200, 20);
-	*/	
+*/	
 
 
 	//敵の移動。キャラとの判定。消滅など。
@@ -235,4 +249,8 @@ int EnemyManager::GetDeadflag(int a){
 		deadflg = a;
 	}
 	return 0;
+}
+void EnemyManager::MainThread(HDC hdc) {
+	std::thread t1(&EnemyManager::MainLoop, this, hdc);
+	t1.join();
 }

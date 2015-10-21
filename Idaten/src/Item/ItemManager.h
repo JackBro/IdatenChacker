@@ -5,6 +5,7 @@
 #include<vector>
 #include<math.h>
 #include<time.h>
+#include<thread>
 
 #include"Itemclass.h"
 
@@ -109,7 +110,8 @@ class ItemManager{
 		void MainLoop(HDC);
 		int GetItemtype(){ return itemtype; }
 		int GetItemtype(int);
-
+		
+		void MainThread(HDC);
 
 	ItemManager();
 	ItemManager(int);
