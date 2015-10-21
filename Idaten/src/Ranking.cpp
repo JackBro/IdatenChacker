@@ -11,11 +11,11 @@ void Ranking_Load()
 	
 	if ((fp = fopen(FileName, "r")) == NULL){
 		for (i = 0; i < 3; i++){
-			r_time[i] = 999;
+			r_time[i] = 999,0;
 		}
 	}else{
 		for (i = 0; i < 3; i++){
-			fscanf(fp, "%*s%d%*s", &r_time[i]);	//“Ç‚Ýž‚Ý
+			fscanf(fp, "%*s%f%*s",&r_time[i]);	//“Ç‚Ýž‚Ý
 		}
 		fclose(fp);
 	}
@@ -73,13 +73,14 @@ void Ranking_save(HDC hdc)
 			r_time[2] = S_time;
 		}
 
-			fprintf(fp, "1ˆÊ %d•b\n", r_time[0]);
-			DebugStringColor("1ˆÊ %f•b",r_time[0], hdc, 500, 65 * (2 + 3), 30, 0, 0, 0);
+			fprintf(fp, "1ˆÊ %f•b\n",r_time[0]);
+			DebugStringColor("1ˆÊ %.1f•b", r_time[0],	hdc, 480, 65 * (2 + 3), 30, 0, 0, 0);
 
-			fprintf(fp, "2ˆÊ %d•b\n", r_time[1]);
-			DebugStringColor("2ˆÊ %f•b", r_time[1], hdc, 500, 65 * (2 + 4), 30, 0, 0, 0);
-			fprintf(fp, "3ˆÊ %d•b\n", r_time[2]);
-			DebugStringColor("3ˆÊ %f•b", r_time[2], hdc, 500, 65 * (2 + 5), 30, 0, 0, 0);
+			fprintf(fp, "2ˆÊ %f•b\n",r_time[1]);
+			DebugStringColor("2ˆÊ %.1f•b", r_time[1], hdc, 480, 65 * (2 + 4), 30, 0, 0, 0);
+
+			fprintf(fp, "3ˆÊ %f•b\n", r_time[2]);
+			DebugStringColor("3ˆÊ %.1f•b", r_time[2], hdc, 480, 65 * (2 + 5), 30, 0, 0, 0);
 		
 	fclose(fp);
 }
