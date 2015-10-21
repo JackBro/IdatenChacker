@@ -40,8 +40,8 @@ int Init_Game();
 int Get_Key(int);
 int SceneChanger();
 
-DWORD S_time;		//現在のタイム
-					//int r_time[5];		//既存のタイム
+float S_time;		//現在のタイム
+float r_time[5];					//int r_time[5];		//既存のタイム
 char namae[15];
 
 
@@ -186,9 +186,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		ReleaseDC(hWnd, hdc);
 
 		//シーン用BITMAP
-		menu_hb[Title] = (HBITMAP)LoadImage(NULL, TEXT("title.bmp"), IMAGE_BITMAP,
+		menu_hb[Title] = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/title.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-		menu_hb[End] = (HBITMAP)LoadImage(NULL, TEXT("end.bmp"), IMAGE_BITMAP,
+		menu_hb[End] = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/end.bmp"), IMAGE_BITMAP,
 			0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	
 
@@ -283,7 +283,7 @@ int Paint(HDC hdc)
 		sandstorm.Start(hdc);
 
 
-		if (cc > 8){	
+		if (cc > 1){	
 			SceneNum *= -1;	//マイナスの値になってるSceneNumを戻す
 			delete scrobj;
 			scrobj = new Scroll(SceneNum);
