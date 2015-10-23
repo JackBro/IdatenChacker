@@ -1,14 +1,14 @@
 #include"debugmsg.h"
 
 ///// 文字の表示関数 /////////////////////////////////////////////////////
-int Str_Put(HDC hdc, int x, int y, int font_size, UINT color, TCHAR *str)
+int Str_Put(HDC hdc, int x, int y, int font_size, UINT color, TCHAR *str,int rotate = 0)
 {
 	HFONT hfont, oldfont;
 
 	hfont = CreateFont(
 		font_size,					// フォントの高さ
 		0,							// 文字送り方向の角度
-		0,							// ベースラインの角度
+		rotate,							// ベースラインの角度
 		0,							// フォントの太さ
 		FW_DONTCARE,				// 平均文字幅
 		FALSE, //or TRUE			// 斜体にするかどうか
@@ -20,7 +20,7 @@ int Str_Put(HDC hdc, int x, int y, int font_size, UINT color, TCHAR *str)
 		DEFAULT_QUALITY,			// 出力品質
 		DEFAULT_PITCH | FF_DONTCARE,// ピッチとファミリ
 		//			TEXT("ＭＳ 明朝")			// フォント名
-		TEXT("HG創英角ﾎﾟｯﾌﾟ体")
+		TEXT("HG明朝E")
 		);
 
 	if (hfont == NULL)
