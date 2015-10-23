@@ -4,9 +4,9 @@ Enemy01::Enemy01(int x,int y){
 	init();
 	enemy.x = x;
 	enemy.y = y;
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/shot/1.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/shot/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	bullet_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/shot/bullet.bmp"), IMAGE_BITMAP,
+	bullet_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/shot/bullet.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	}
 Enemy01::~Enemy01(){

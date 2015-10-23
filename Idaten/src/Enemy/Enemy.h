@@ -7,8 +7,12 @@
 
 #include"../player_info.h"
 
-#include"../debugmsg.h"
+//#include"../debugmsg.h"
 #include"../Option.h"
+
+#include<mmsystem.h>
+#pragma comment(lib,"winmm.lib")
+
 
 
 /*
@@ -24,6 +28,11 @@
 
 class Enemy{
 protected:
+	MCI_OPEN_PARMS SEDAMAGE;
+	MCI_OPEN_PARMS SETAKED;
+
+	MCI_PLAY_PARMS SEENEMY;
+
 
 
 	int DEADflg = 0;	//敵とキャラクターが接触した場合に真（-１）ゲージを直接いじるので－１
@@ -98,6 +107,7 @@ public :
 
 //デストラクタは仮想
 	Enemy();
-	virtual ~Enemy(){};
+	virtual ~Enemy(){
+	};
 };
 

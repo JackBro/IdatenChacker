@@ -19,6 +19,18 @@ Enemy::Enemy(){
 	enemyID = 0;
 
 	enemy_bullet.onActive = 0;
+
+	SEDAMAGE.lpstrDeviceType = L"WaveAudio";
+	SEDAMAGE.lpstrElementName = L"click.wav";
+	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
+
+
+	SETAKED.lpstrDeviceType = L"WaveAudio";
+	SETAKED.lpstrElementName = L"../res/SE/click.wav";
+	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
+
+
+
 }
 
 
@@ -38,7 +50,7 @@ int Enemy::Enemy_paint(HDC hdc){
 
 	enemyhdc = hdc;
 
-	if (enemy.onActive & 1){
+	if (enemy.onActive & 1 && enemy.onActive > 0){
 
 		HDC hdc_work;
 		hdc_work = CreateCompatibleDC(hdc);
@@ -61,7 +73,13 @@ int Enemy::chara_strc(player_info *tp){
 }
 
 int Enemy::hit_enemycheck(){
-	if (enemy.onActive & 1){
+		static MCI_OPEN_PARMS SEDAMAGE;
+	static MCI_OPEN_PARMS SETAKED;
+
+	static MCI_PLAY_PARMS SEENEMY;
+
+
+	if (enemy.onActive & 1 && enemy.onActive > 0){
 		//“–‚½‚è”»’è@ŽlŠpŒ`
 		int ex = enemy.x;
 		int ey = enemy.y;
@@ -76,15 +94,21 @@ int Enemy::hit_enemycheck(){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2){
 				if (ey <= ph - 12){
 					DEADflg = -1;//??ƒLƒƒƒ‰‚É‰e‹¿‚·‚é Ž€–S‚Ìˆµ‚¢‚Í•s–¾B
+					mciSendCommand(SEDAMAGE.wDeviceID, MCI_PLAY, 0, (DWORD)&SEENEMY);
+
+					
 				}else
 					plstats->c_flg = 4;
 
 			}
 			
-			enemy.onActive = 0;
+			enemy.onActive = -30;
 			enemy_bullet.onActive = 0;
 
 		}
+	}
+	else {
+		enemy.onActive++;
 	}
 	return 0;
 }
@@ -157,7 +181,7 @@ int Enemy::hit_enemycheckRide() {
 					}
 				}
 
-				DebugStringFloat("%d", pw - ex, enemyhdc, 200, 200, 20);
+//				DebugStringFloat("%d", pw - ex, enemyhdc, 200, 200, 20);
 
 			//
 		}

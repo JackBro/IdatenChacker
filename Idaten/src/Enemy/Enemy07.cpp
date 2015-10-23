@@ -8,11 +8,11 @@ Enemy07::Enemy07(int x,int y)
 	enemy.y = y;
 	init();
 	
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/mop/1.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/mop/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	enemy_hbList = new HBITMAP [2];
 	enemy_hbList[0] = enemy_hb;
-	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/mop/2.bmp"), IMAGE_BITMAP,
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/mop/2.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 }
