@@ -41,7 +41,7 @@ int bossmanager::POP_BOSS(){
 		obj->BOSSID(POPLIST[0]);
 			bsobj = std::move(obj);
 
-			//POPLIST.erase(POPLIST.begin());
+			POPLIST.erase(POPLIST.begin());
 	return 0;
 }
 void bossmanager::MAIN(HDC hdc){
@@ -49,7 +49,7 @@ void bossmanager::MAIN(HDC hdc){
 		bosshdc = hdc;
 		POP_BOSS();
 
-		DebugStringVal("%d", POPLIST, hdc, 200, 200, 20);
+		//DebugStringVal("%d", bsobj->BOSS_paint(hdc), hdc, 200, 200, 20);
 
 		int ex = bsobj->Boss_x(), ey = bsobj->Boss_y();
 
