@@ -8,6 +8,8 @@
 
 #include"Option.h"
 
+#include"debugmsg.h"
+
 class BOSS
 {
 protected:

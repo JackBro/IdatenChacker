@@ -32,7 +32,7 @@ class bossmanager
 	int POPPOINT[2];
 	std::vector<std::vector<int>>DESINATE; //ç¿ïWÇäiî[Ç∑ÇÈÇΩÇﬂ
 
-	std::vector<int>POPLIST;		
+	//std::vector<int>POPLIST;		
 	//int POPLIST[1];
 public:
 

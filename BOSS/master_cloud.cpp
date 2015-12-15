@@ -6,7 +6,7 @@ master_cloud::master_cloud(int x,int y)
 	boss.x = x;
 	boss.y = y;
 
-	boss_hb = (HBITMAP)LoadImage(NULL, TEXT("マスタークラウド.bmp"),
+	boss_hb = (HBITMAP)LoadImage(NULL, TEXT("master_cloud.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
@@ -31,22 +31,24 @@ int master_cloud::init(){
 	return 0;
 }
 
-int  master_cloud::move_boss(){
+int  master_cloud::move_boss(HDC hdc){
 
-	if (boss.active == 1){
+	
+	
+		boss.move_cnt++;
 
 		if (boss.move_cnt >= boss.max_cnt){
 			boss.move_cnt = 0;
 		}
 		else if (boss.move_cnt <= boss.max_cnt / 2){
 			boss.dy = boss.step_y;
+			boss.y += boss.dy;
 		}
 		else if (boss.move_cnt > 0){
 			boss.dy = -boss.step_y;
+			boss.y += boss.dy;
 		}
-		boss.move_cnt++;
-	}
-	boss.y += boss.dy;
+	
 	if (boss.durability <= 0){
 		boss.active = 0;
 	}

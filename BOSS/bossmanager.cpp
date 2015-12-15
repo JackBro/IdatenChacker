@@ -4,13 +4,12 @@ bossmanager::bossmanager()
 {
 	stageID = Boss;
 	deadflg = 0;
-
 	SET_POINT();
 
-	for (int i = 0; i < 1;i++)
+	/*for (int i = 0; i < size;i++)
 	{
 		POPLIST.push_back(i);
-	}
+	}*/
 
 }
 
@@ -21,10 +20,10 @@ bossmanager::bossmanager(int num)
 
 	SET_POINT();
 
-	for (int i = 0; i < 1;i++)
+	/*for (int i = 0; i < size;i++)
 	{
 	POPLIST.push_back(i);
-	}
+	}*/
 
 }
 
@@ -35,13 +34,13 @@ bossmanager::~bossmanager()
 int bossmanager::POP_BOSS(){
 
 
-		GET_POINT(POPLIST[0]);
+		GET_POINT(0);
 
 		std::unique_ptr<BOSS>obj(new master_cloud(POPPOINT[0], POPPOINT[1]));
-		obj->BOSSID(POPLIST[0]);
+		obj->BOSSID(0);
 			bsobj = std::move(obj);
 
-			POPLIST.erase(POPLIST.begin());
+			//POPLIST.erase(POPLIST.begin());
 	return 0;
 }
 void bossmanager::MAIN(HDC hdc){
@@ -49,11 +48,13 @@ void bossmanager::MAIN(HDC hdc){
 		bosshdc = hdc;
 		POP_BOSS();
 
-		//DebugStringVal("%d", bsobj->BOSS_paint(hdc), hdc, 200, 200, 20);
-
+		
 		int ex = bsobj->Boss_x(), ey = bsobj->Boss_y();
 
 	if (ex > 0 && ey > 0 && ex < WINDOW_WIDTH && ey < WINDOW_HEIGHT){
+		DebugStringVal("%d", POPPOINT[0], hdc, 200, 200, 20);
+		DebugStringVal("%d", POPPOINT[1], hdc, 200, 250, 20);
+		
 		bsobj->chara_strc(plstats);
 		bsobj->move_boss();
 		bsobj->BOSS_paint(hdc);
@@ -73,7 +74,7 @@ int bossmanager::chara_strc(player_info *tp){
 }
 void bossmanager::SET_POINT(){
 	int desinate[1][2]{
-		{ 200 * CHIP_SIZE, 40 * CHIP_SIZE }
+		{ 30 * CHIP_SIZE, 35 * CHIP_SIZE }
 	};
 	std::vector<int>n;
 	for (int i = 0; i < 1; i++){

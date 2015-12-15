@@ -23,7 +23,7 @@ int BOSS::chara_strc(player_info *tp){
 
 int BOSS::hit_bosscheck(){
 
-	if (boss.active & 1 && boss.durability > 0){
+	if (boss.active & 1 && boss.active>0){
 
 		int ex = boss.x;
 		int ey = boss.y;
@@ -40,7 +40,6 @@ int BOSS::hit_bosscheck(){
 					DEADflg = -1;
 				}
 			}
-			boss.durability = -1;
 		}
 
 	}
@@ -49,8 +48,8 @@ int BOSS::hit_bosscheck(){
 
 
 
-int BOSS::nohit_bosscheck(){
-	if (boss.active & 1 && boss.durability > 0){
+/*int BOSS::nohit_bosscheck(){
+	if (boss.active & 1){
 
 		int ex = boss.x;
 		int ey = boss.y;
@@ -68,7 +67,7 @@ int BOSS::nohit_bosscheck(){
 		}
 	}
 	return 0;
-}
+}*/
 
 int BOSS::boss_scroll(int x, int y){
 	boss.x += x;
@@ -93,7 +92,7 @@ int BOSS::BOSS_paint(HDC hdc){
 		SelectObject(hdc_work, boss_hb);
 		int ex = boss.x;
 		int ey = boss.y;
-		TransparentBlt(hdc, ex, ey, boss.width, boss.height, hdc_work, 0, 0, boss.width, boss.height, RGB(0, 0, 255));
+		TransparentBlt(hdc, ex, ey, boss.width, boss.height, hdc_work, 0, 0, 120, 180, RGB(0, 0, 255));
 		DeleteDC(hdc_work);
 	}
 	return 0;
