@@ -1,5 +1,7 @@
+#ifndef _timer_H
+#define _timer_H
 #include<Windows.h>
-extern float S_time;
+extern double S_time;
 
 class Timer {
 	DWORD timestart;	//ƒvƒƒOƒ‰ƒ€‹N“®‚ÌŠÔ
@@ -13,4 +15,4 @@ public:
 	void ShowTime(HDC hdc);
 	void ShowTime2(HDC hdc);
 };
-
+#endif
