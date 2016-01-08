@@ -63,11 +63,12 @@ int SceneChanger();
 double S_time;			//タイム
 char namae[15];
 static int flag2 = OFF;
-
+static int flag3 = OFF;
 
 
 
 #define KEY_SPACE 32
+
 
 HBITMAP menu_hb[5];	//タイトルやクリア画面
 
@@ -352,15 +353,18 @@ LRESULT CALLBACK WndProc1(HWND hWnd2, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 		case ID_BUTTON1:
+			
 			GetWindowText(hEWnd1, rankobj.name, 30);
 			rankobj.NameInput(hWnd2);
 			DestroyWindow(hWnd2);
+
 			break;
 		default:
 			return(DefWindowProc(hWnd2, msg, wParam, lParam));
 		}
 		break;
 	case WM_DESTROY:
+		flag3 = ON;
 		break;
 	default:
 		return (DefWindowProc(hWnd2, msg, wParam, lParam));
@@ -416,8 +420,9 @@ int Paint(HDC hdc)
 
 		if (cc > 50){
 			cc = Get_Key(cc);
-			if (cc == 1){
-			
+			if (flag3 == ON){
+				if (cc == 1){
+
 					SEOPEN.lpstrDeviceType = L"WaveAudio";
 					SEOPEN.lpstrElementName = L"res/SE/tackle.wav";
 
@@ -430,23 +435,23 @@ int Paint(HDC hdc)
 					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 					mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
 
-			
-				SceneChanger();
-				eobj = new EnemyManager(SceneNum);
-				iobj = new ItemManager(SceneNum);
-				scrobj = new Scroll(SceneNum);
-				blobj = new Block(SceneNum);
-				paint_player_obj = new(PAINT);
-				//oilobj = new(OIL);
-				//paint_player_obj->obj2 = new(MOVE);
 
-				timeobj = new(Timer);
-				timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
-				/*if (SceneNum == Boss)
-				{
+					SceneChanger();
+					eobj = new EnemyManager(SceneNum);
+					iobj = new ItemManager(SceneNum);
+					scrobj = new Scroll(SceneNum);
+					blobj = new Block(SceneNum);
+					paint_player_obj = new(PAINT);
+					//oilobj = new(OIL);
+					//paint_player_obj->obj2 = new(MOVE);
+
+					timeobj = new(Timer);
+					timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
+					/*if (SceneNum == Boss)
+					{
 					bsobj = new BossManager(SceneNum);
-				}*/
-
+					}*/
+				}
 			}
 		}
 
@@ -657,11 +662,11 @@ int SceneChanger(){
 	switch (key_input_buff)
 	{
 	case 32:
-		
-		if (SceneNum == Title){
-			SceneNum = Stage1;
+		if (flag3 == ON){
+			if (SceneNum == Title){
+				SceneNum = Stage1;
+			}
 		}
-		
 		
 		if (SceneNum == End){
 			SceneNum = Title;
