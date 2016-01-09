@@ -6,7 +6,7 @@
 #include <windows.h>
 #include <math.h>	// atan2()を使うために必要
 #include <time.h>   // time()を使うのに必要
-
+#include <assert.h>
 
 //要素
 #include "Enemy\EnemyManager.h"
@@ -32,8 +32,24 @@
 #include"Option.h"
 
 
+static MCI_OPEN_PARMS mop;
+static MCI_PLAY_PARMS mpp;
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// ウインドウプロシージャ関数
+TCHAR szClassName[] = TEXT("Window01"); // ウィンドウクラス。UNICODEとしての文字列定数
+TCHAR szClassName2[] = TEXT("edit2"); // ウィンドウクラス。UNICODEとしての文字列定数
+LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// ゲーム用ウインドウプロシージャ関数
+LRESULT CALLBACK WndProc1(HWND, UINT, WPARAM, LPARAM);	// 名前用ウインドウプロシージャ関数
+
+BOOL InitApp(HINSTANCE);	//ウィンドウクラス構造体
+BOOL InitApp1(HINSTANCE);	//名前用
+BOOL InitInstance(HINSTANCE, int);	//ウィンドウ生成
+BOOL InitInstance1(HINSTANCE, int);	//名前用
+
+#define ID_EDIT1   1000		//EDIT用
+#define ID_BUTTON1    1020	//ボタン用
+
+HWND hWnd;					//ゲーム用
+HWND hEWnd1, hBWnd1;		//エディット用、ボタン用
 
 
 int SceneNum;
@@ -44,27 +60,31 @@ int Init_Game();
 int Get_Key(int);
 int SceneChanger();
 
-float S_time;		//現在のタイム
-float r_time[5];					//int r_time[5];		//既存のタイム
+double S_time;			//タイム
 char namae[15];
+static int flag2 = OFF;
+static int flag3 = OFF;
+
 
 
 #define KEY_SPACE 32
+
 
 HBITMAP menu_hb[5];	//タイトルやクリア画面
 
 BYTE key_input_buff;// キーボード情報
 BYTE key_buff[256];
 
-HWND hWnd;
-
 
 PAINT *paint_player_obj;
 Scroll *scrobj;
 Block *blobj;
 EnemyManager *eobj;
+
 ItemManager *iobj;
 Timer *timeobj;
+Ranking_Name rankobj;
+
 
 SandStrom sandstorm;
 FrameRate frr;
@@ -76,46 +96,26 @@ FrameRate frr;
 /////メイン関数///////////////////////////////////////////////////////////////////////////////////////////
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	WNDCLASS wc;
 	MSG msg;
 
+	if (!hPrevInstance) {
+		if (!InitApp(hInstance))		//ゲーム用のウィンドウ初期化
+			return FALSE;
+	}
 
-	// ウインドウクラス構造体
-	ZeroMemory(&wc, sizeof(WNDCLASS));
-	wc.style = CS_HREDRAW | CS_VREDRAW;         // ウインドウスタイル
-	wc.lpfnWndProc = (WNDPROC)WndProc;                // ウインドウプロシージャアドレス
-	wc.cbClsExtra = 0;                               // 補助領域サイズ（使用しない）
-	wc.cbWndExtra = 0;                               // 補助領域サイズ（使用しない）
-	wc.hInstance = hInstance;                       // インスタンスハンドル
-	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); // アイコン
-	wc.hCursor = LoadCursor(NULL, IDC_ARROW);     // マウスカーソル
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);      // ウィンドウ画面の色
-	wc.lpszMenuName = NULL;                            // ウインドウメニュー（使用しない）
-	wc.lpszClassName = TEXT("Window01");                // ウインドウクラス名
+	if (!InitInstance(hInstance, nCmdShow)) {	//ゲーム用のウィンドウ生成
+		return FALSE;
+	}
 
-	// ウインドウクラスの登録
-	if (!RegisterClass(&wc)) return FALSE;
-
-	// ウインドウの作成
-	hWnd = CreateWindow(
-		TEXT("Window01"), TEXT("イダテン・チャッカー"),					// ウインドウのタイトル名
-		WS_OVERLAPPEDWINDOW^WS_THICKFRAME^WS_MAXIMIZEBOX,			// ウインドウスタイル
-		CW_USEDEFAULT,												// ウィンドウの表示X座標
-		CW_USEDEFAULT,												// ウィンドウの表示Y座標
-		WINDOW_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,						// ウィンドウの幅
-		WINDOW_HEIGHT + GetSystemMetrics(SM_CYDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	// 高さ
-		NULL,														// 親ウインドウ
-		NULL,														// ウインドウメニュー
-		hInstance,													// インスタンスハンドル
-		NULL);														 // WM_CREATE情報
-
-	// ウインドウの表示
-	ShowWindow(hWnd, nCmdShow);                         // 表示状態の設定
-	UpdateWindow(hWnd);                                 // クライアント領域の更新
-	
-	
+	if (!hPrevInstance) {
+		if (!InitApp1(hInstance))		//名前用のウィンドウ初期化
+			return FALSE;
+	}
 
 
+	if (!InitInstance1(hInstance, nCmdShow)) {	//名前用のウィンドウ生成
+		return FALSE;
+	}
 	
 	// メッセージループ
 	while (true)
@@ -124,6 +124,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT) break;
+			TranslateMessage(&msg);  //キーボード利用を可能にする
 			DispatchMessage(&msg);
 		}
 		else
@@ -139,10 +140,85 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return msg.wParam;
 }
 
+BOOL InitApp(HINSTANCE hInstance)
+{
+	WNDCLASS wc;
+	// ウインドウクラス構造体
+	ZeroMemory(&wc, sizeof(WNDCLASS));
+	wc.style = CS_HREDRAW | CS_VREDRAW;         // ウインドウスタイル
+	wc.lpfnWndProc = (WNDPROC)WndProc;                // ウインドウプロシージャアドレス
+	wc.cbClsExtra = 0;                               // 補助領域サイズ（使用しない）
+	wc.cbWndExtra = 0;                               // 補助領域サイズ（使用しない）
+	wc.hInstance = hInstance;                       // インスタンスハンドル
+	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION); // アイコン
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);     // マウスカーソル
+	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);      // ウィンドウ画面の色
+	wc.lpszMenuName = NULL;                            // ウインドウメニュー（使用しない）
+	wc.lpszClassName = TEXT("Window01");                // ウインドウクラス名
+
+	// ウインドウクラスの登録
+	if (!RegisterClass(&wc)) return FALSE;
+}
+
+BOOL InitApp1(HINSTANCE hInstance)
+{
+	WNDCLASS wc;
+	ZeroMemory(&wc, sizeof(WNDCLASS));
+	wc.style = CS_HREDRAW | CS_VREDRAW;		 // ウインドウスタイル
+	wc.lpfnWndProc = WndProc1;				// ウインドウプロシージャアドレス
+	wc.cbClsExtra = 0;						// 補助領域サイズ（使用しない）
+	wc.cbWndExtra = 0;
+	wc.hInstance = hInstance;				// インスタンスハンドル
+	wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wc.lpszMenuName = NULL;   // ウインドウメニュー
+	wc.lpszClassName = szClassName2;	// ウインドウクラス名
+
+	// ウインドウクラスの登録
+	if (!RegisterClass(&wc)) return FALSE;
+}
+
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+	hWnd = CreateWindow(
+		szClassName, TEXT("イダテン・チャッカー"),					// ウインドウのタイトル名
+		WS_OVERLAPPEDWINDOW^WS_THICKFRAME^WS_MAXIMIZEBOX,			// ウインドウスタイル
+		180,												// ウィンドウの表示X座標
+		100,												// ウィンドウの表示Y座標
+		WINDOW_WIDTH + GetSystemMetrics(SM_CXDLGFRAME) * 2,						// ウィンドウの幅
+		WINDOW_HEIGHT + GetSystemMetrics(SM_CYDLGFRAME) * 2 + GetSystemMetrics(SM_CYCAPTION),	// 高さ
+		NULL,														// 親ウインドウ
+		NULL,														// ウインドウメニュー
+		hInstance,													// インスタンスハンドル
+		NULL);														 // WM_CREATE情報
+
+	// ウインドウの表示
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
+	return TRUE;
+}
+
+BOOL InitInstance1(HINSTANCE hInstance, int nCmdShow)
+{
+	hWnd2 = CreateWindow(
+		szClassName2,
+		TEXT("名前入力"),					// ウインドウのタイトル名
+		WS_OVERLAPPED,			// ウインドウスタイル
+		180,												// ウィンドウの表示X座標
+		100,												// ウィンドウの表示Y座標
+		180,						// ウィンドウの幅
+		150,						// 高さ
+		NULL,														// 親ウインドウ
+		NULL,														// ウインドウメニュー
+		hInstance,													// インスタンスハンドル
+		NULL);													 // WM_CREATE情報
+	ShowWindow(hWnd2, nCmdShow);
+	UpdateWindow(hWnd2);
+	return TRUE;
+}
 
 
-static MCI_OPEN_PARMS mop;
-static MCI_PLAY_PARMS mpp;
 ///////ウインドウプロシージャ関数//////////////////////////////////////////////////////////
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -177,8 +253,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hdc = BeginPaint(hWnd, &ps);	// 描画の開始
 		Paint(hdc_back);				// Paint関数へ
 		
-
-
 		//バックバッファに保存された画像を表画面に描画
 		BitBlt(hdc, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, hdc_back, 0, 0, SRCCOPY);
 
@@ -193,9 +267,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 		mpp.dwCallback = (DWORD)hWnd;
 
-
 		mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
-
 
 		frr.SetSampleNum(100);
 		Init_Game();
@@ -236,14 +308,69 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 int Init_Game(){
 
-
 	SceneNum = Title;
-
 
 	return 0;
 }
 
+//名前入力
+LRESULT CALLBACK WndProc1(HWND hWnd2, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	int id;
+	PAINTSTRUCT ps;
+	HDC hdc;
+	HINSTANCE hInst;
 
+	switch (msg) {
+
+	case WM_CREATE:
+		hInst = ((LPCREATESTRUCT)lParam)->hInstance;
+		hEWnd1 = CreateWindow(TEXT("EDIT"),		//名前入力の欄
+			TEXT("名前を入力"),
+			WS_CHILD | WS_VISIBLE,
+			60, 10,
+			100, 20,
+			hWnd2,
+			(HMENU)ID_EDIT1,
+			hInst,
+			NULL);
+		hBWnd1 = CreateWindow(TEXT("BUTTON"),		//決定ボタン
+			TEXT("決定"),
+			WS_CHILD | WS_VISIBLE | BS_PUSHBUTTON,
+			30, 50,
+			100, 30,
+			hWnd2,
+			(HMENU)ID_BUTTON1,
+			hInst,
+			NULL);
+
+		break;
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd2, &ps);
+		TextOut(hdc, 10, 10, TEXT("名前："), 3);
+		EndPaint(hWnd2, &ps);
+		break;
+	case WM_COMMAND:
+		switch (LOWORD(wParam)) {
+		case ID_BUTTON1:
+			
+			GetWindowText(hEWnd1, rankobj.name, 30);
+			rankobj.NameInput(hWnd2);
+			DestroyWindow(hWnd2);
+
+			break;
+		default:
+			return(DefWindowProc(hWnd2, msg, wParam, lParam));
+		}
+		break;
+	case WM_DESTROY:
+		flag3 = ON;
+		break;
+	default:
+		return (DefWindowProc(hWnd2, msg, wParam, lParam));
+	}
+	return 0L;
+}
 
 
 
@@ -281,17 +408,23 @@ int Paint(HDC hdc)
 	static MCI_OPEN_PARMS SEOPEN;
 	static MCI_PLAY_PARMS SEPLAY;
 
-	static bool s_s_flg;
 	static int cc;
 	if (SceneNum == Title){
 		Paint_BG(hdc,Title);		// 背景描画関数へ
+
+		flag = ON;
+		if (flag2 == OFF){
+			flag2 = ON;
+			InitInstance1(GetModuleHandle(NULL), SW_SHOW);	//名前用のウィンドウ生成
+		}
+
 		if (cc > 50){
 			cc = Get_Key(cc);
-			if (cc == 1){
-				if (!s_s_flg) {
+			if (flag3 == ON){
+				if (cc == 1){
 
 					SEOPEN.lpstrDeviceType = L"WaveAudio";
-					SEOPEN.lpstrElementName = L"res/SE/click.wav";
+					SEOPEN.lpstrElementName = L"res/SE/tackle.wav";
 
 					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEOPEN);
 					mciSendCommand(SEOPEN.wDeviceID, MCI_PLAY, 0, (DWORD)&SEPLAY);
@@ -302,23 +435,23 @@ int Paint(HDC hdc)
 					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 					mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
 
-					s_s_flg = true;
+
+					SceneChanger();
+					eobj = new EnemyManager(SceneNum);
+					iobj = new ItemManager(SceneNum);
+					scrobj = new Scroll(SceneNum);
+					blobj = new Block(SceneNum);
+					paint_player_obj = new(PAINT);
+					//oilobj = new(OIL);
+					//paint_player_obj->obj2 = new(MOVE);
+
+					timeobj = new(Timer);
+					timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
+					/*if (SceneNum == Boss)
+					{
+					bsobj = new BossManager(SceneNum);
+					}*/
 				}
-
-				SceneChanger();
-				eobj = new EnemyManager(SceneNum);
-				iobj = new ItemManager(SceneNum);
-				scrobj = new Scroll(SceneNum);
-				blobj = new Block(SceneNum);
-				paint_player_obj = new(PAINT);
-				//oilobj = new(OIL);
-				//paint_player_obj->obj2 = new(MOVE);
-
-				timeobj = new(Timer);
-				timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
-				
-
-			
 			}
 		}
 
@@ -336,7 +469,7 @@ int Paint(HDC hdc)
 			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 			mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
 
-			s_s_flg = true;
+		
 
 			SceneNum *= -1;	//マイナスの値になってるSceneNumを戻す
 			delete scrobj;
@@ -346,16 +479,20 @@ int Paint(HDC hdc)
 			blobj = new Block(SceneNum);
 
 			delete eobj;
-			eobj = new EnemyManager(SceneNum);
-			
+				eobj = new EnemyManager(SceneNum);
 			delete iobj;
 			iobj = new ItemManager(SceneNum);
-			paint_player_obj->obj2->player.x = 120;
-			paint_player_obj->obj2->player.y = 420;
+			
+				paint_player_obj->obj2->player.x = 120;
+				paint_player_obj->obj2->player.y = 420;
+			
 			sandstorm.End();
+
+			
 		}
 	}
 	else if (SceneNum == Stage1 || SceneNum == Stage2){
+		
 		paint_player_obj->obj2->C_sts(paint_player_obj->obj->c_sts, &paint_player_obj->obj->Oil_Gage);
 		paint_player_obj->obj2->Move();
 
@@ -380,7 +517,7 @@ int Paint(HDC hdc)
 			mop.lpstrElementName = L"res/Sound/SandStorm.wav";
 			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 			mciSendCommand(mop.wDeviceID, MCI_PLAY, 0, (DWORD)&mop);
-			s_s_flg = false;
+		
 
 
 			return 0;
@@ -426,7 +563,7 @@ int Paint(HDC hdc)
 
 
 		//移動量の最大値の抑制
-		if (paint_player_obj->obj2->player.vx < -10)paint_player_obj->obj2->player.vx = -10;
+		if (paint_player_obj->obj2->player.vx < -30)paint_player_obj->obj2->player.vx = -10;
 		if (paint_player_obj->obj2->player.vy > 10)	paint_player_obj->obj2->player.vy = 10;
 
 		paint_player_obj->obj2->player.x += paint_player_obj->obj2->player.vx;
@@ -445,20 +582,34 @@ int Paint(HDC hdc)
 
 		
 	}
+	
 	else if (SceneNum == Boss) {
 		if (cc > 10) {
 			SceneNum = End;
 			cc = 0;
+
 		}
 	}
 	else if (SceneNum == End){
 		Paint_BG(hdc,End);  //ed
 		timeobj->ShowTime(hdc);//タイム描画
-		Ranking_Load();		//ランキングロード
-		Ranking_save(hdc);
+		flag2 = OFF;
+		if (flag == ON){
+			rankobj.Reading();
+			rankobj.AddRanking(hWnd2);		//ランキング更新
+			flag = OFF;
+		}
+
+		rankobj.Ranking_Paint(hdc);
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
+				mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+
+				mop.lpstrElementName = L"res/Sound/title.wav";
+				mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
+				mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
+
 				SceneChanger();
 				delete eobj;
 				delete iobj;
@@ -471,7 +622,7 @@ int Paint(HDC hdc)
 		
 	}
 	cc++;
-	DebugStringFloat("%2.2f", frr.GetFrameRate() / 10, hdc, 100, 50, 22);
+	//DebugStringFloat("%2.2f", frr.GetFrameRate() / 10, hdc, 100, 50, 22);
 
 
 	return 0;
@@ -511,9 +662,12 @@ int SceneChanger(){
 	switch (key_input_buff)
 	{
 	case 32:
-		if (SceneNum == Title){
-			SceneNum = Stage1;
+		if (flag3 == ON){
+			if (SceneNum == Title){
+				SceneNum = Stage1;
+			}
 		}
+		
 		if (SceneNum == End){
 			SceneNum = Title;
 		}

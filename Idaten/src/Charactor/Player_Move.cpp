@@ -148,33 +148,36 @@ int MOVE::Move_DEBU()
 			player.vx = 6;
 			houkou = 1;
 		}
-		else{
-			houkou = 2;
-		}
 		if (houkou == 0){
 			a_flg = A_JUMP_Left;
 		}
 		if (houkou == 1){
 			a_flg = A_JUMP;
 		}
-		if (houkou == 2){
-			a_flg = A_JUMP;
-		}
+		
 	}
 	/*****************************************/
 
 	/******タックル***************************/
-	if (x == 1){      //Xキーが押されたら
+	if (x == 1){ //Xキーが押されたら
 		player.c_flg = TACKLE;
 	}
 	if (player.c_flg == TACKLE){ //値のセット	
 		player.vy = 0;
 		player.c_flg = TACKLE_STOP;
 	}
+
 	/*****タックルの終了*******/
 	if (player.c_flg == TACKLE_STOP){
-		player.vx += player.attack_x;
-		player.attack_mukou -= 3;//次のXキーの入力待ち時間
+		if (houkou == 0){
+			player.vx -= player.attack_x + 10;
+		}
+		if (houkou == 1){
+			player.vx += player.attack_x;
+		}
+
+
+		player.attack_mukou -= 5;//次のXキーの入力待ち時間
 		player.attack_x -= 5;	//タックルの減速値
 
 		if (player.attack_x <= 0){
@@ -187,8 +190,11 @@ int MOVE::Move_DEBU()
 			x = 0;
 			player.c_flg = STAND;
 		}
-		a_flg = A_TACKLE;
+
+		if (houkou == 1)a_flg = A_TACKLE;
+		if (houkou == 0)a_flg = A_TACKLE_Left;
 	}
+
 	/****************************************/
 
 	return 0;
@@ -303,18 +309,13 @@ int MOVE::Move_POTYA()
 			player.vx = 8;
 			houkou = 1;
 		}
-		else{
-			houkou = 2;
-		}
 		if (houkou == 0){
 			a_flg = A_JUMP_Left;
 		}
 		if (houkou == 1){
 			a_flg = A_JUMP;
 		}
-		if (houkou == 2){
-			a_flg = A_JUMP;
-		}
+		
 	}
 	/*****************************************/
 
@@ -326,9 +327,25 @@ int MOVE::Move_POTYA()
 		player.vy = 0;
 		player.c_flg = TACKLE_STOP;
 	}
+	/******タックル***************************/
+	if (x == 1){ //Xキーが押されたら
+		player.c_flg = TACKLE;
+	}
+	if (player.c_flg == TACKLE){ //値のセット	
+		player.vy = 0;
+		player.c_flg = TACKLE_STOP;
+	}
+
 	/*****タックルの終了*******/
 	if (player.c_flg == TACKLE_STOP){
-		player.vx += player.attack_x;
+		if (houkou == 0){
+			player.vx -= player.attack_x + 10;
+		}
+		if (houkou == 1){
+			player.vx += player.attack_x;
+		}
+
+
 		player.attack_mukou -= 5;//次のXキーの入力待ち時間
 		player.attack_x -= 5;	//タックルの減速値
 
@@ -343,9 +360,10 @@ int MOVE::Move_POTYA()
 			player.c_flg = STAND;
 		}
 
-
-		a_flg = A_TACKLE;
+		if (houkou == 1)a_flg = A_TACKLE;
+		if (houkou == 0)a_flg = A_TACKLE_Left;
 	}
+
 	/****************************************/
 
 
@@ -470,54 +488,62 @@ int MOVE::Move_HUTHU()
 			player.vx = 10;
 			houkou = 1;
 		}
-		else{
-			houkou = 2;
-		}
 		if (houkou == 1){
 			a_flg = A_JUMP;
 		}
 		if (houkou == 0){
 			a_flg = A_JUMP_Left;
 		}
-		if (houkou == 2){
-			a_flg = A_JUMP;
-		}
+	
 
 		
 	}
 	/*****************************************/
 
 	/******タックル***************************/
-	if (x == 1){      //Xキーが押されたら
+	if (x == 1){ //Xキーが押されたら
 		player.c_flg = TACKLE;
 	}
 	if (player.c_flg == TACKLE){ //値のセット	
 		player.vy = 0;
 		player.c_flg = TACKLE_STOP;
 	}
+
 	/*****タックルの終了*******/
 	if (player.c_flg == TACKLE_STOP){
-		player.vx += player.attack_x;
+		if (houkou == 0){
+			player.vx -= player.attack_x;
+		}
+		if (houkou == 1){
+			player.vx += player.attack_x;
+		}
+
+
 		player.attack_mukou -= 5;//次のXキーの入力待ち時間
 		player.attack_x -= 5;	//タックルの減速値
 
-		
-	}
-	if (player.attack_x <= 0){
-		player.attack_x = 0;
-	}
-	if (player.attack_mukou <= 0){//Xキーの再入力が可能
-		player.attack_x = 30;
-		player.attack_mukou = 90;
-		player.vx = 0;
-		x = 0;
-		player.c_flg = STAND;
-		a_flg = A_TACKLE;
+		if (player.attack_x <= 0){
+			player.attack_x = 0;
+		}
+		if (player.attack_mukou <= 0){//Xキーの再入力が可能
+			player.attack_x = 30;
+			player.attack_mukou = 90;
+			player.vx = 0;
+			x = 0;
+			player.c_flg = STAND;
+		}
+
+		if (houkou == 1)a_flg = A_TACKLE;
+		if (houkou == 0)a_flg = A_TACKLE_Left;
 	}
 
-
-	
 	/****************************************/
+
+	//横移動時A_STANDの描画を消す
+	if (a_flg != A_WALK3_Right && a_flg != A_WALK3_Left && a_flg != A_WALK5_Right && a_flg != A_WALK5_Left
+		&& a_flg != A_WALK8_Right && a_flg != A_WALK8_Left && a_flg != A_WALK12_Right && a_flg != A_WALK12_Left && a_flg != A_WALK14_Right && a_flg != A_WALK14_Left){
+		a_cnt2 = 0;
+	}
 
 	return 0;
 }
@@ -636,18 +662,13 @@ int MOVE::Move_TYOIYASE()
 			player.vx = 12;
 			houkou = 1;
 		}
-		else{
-			houkou = 2;
-		}
 		if (houkou == 1){
 			a_flg = A_JUMP;
 		}
 		if (houkou == 0){
 			a_flg = A_JUMP_Left;
 		}
-		if (houkou == 2){
-			a_flg = A_JUMP;
-		}
+		
 
 
 	}
@@ -664,10 +685,13 @@ int MOVE::Move_TYOIYASE()
 
 	/*****タックルの終了*******/
 	if (player.c_flg == TACKLE_STOP){
-		/*if (houkou == 0){
+		if (houkou == 0){
 			player.vx -= player.attack_x;
-		}*/
-		player.vx += player.attack_x;
+		}
+		if (houkou == 1){
+			player.vx += player.attack_x;
+		}
+		
 		
 		player.attack_mukou -= 5;//次のXキーの入力待ち時間
 		player.attack_x -= 5;	//タックルの減速値
@@ -684,11 +708,17 @@ int MOVE::Move_TYOIYASE()
 		}
 
 		if(houkou == 1)a_flg = A_TACKLE;
-		//if (houkou == 0)a_flg = A_TACKLE_Left;
+		if (houkou == 0)a_flg = A_TACKLE_Left;
 	}
 
 	/****************************************/
+	
 
+	//横移動時A_STANDの描画を消す
+	if (a_flg != A_WALK3_Right && a_flg != A_WALK3_Left && a_flg != A_WALK5_Right && a_flg != A_WALK5_Left
+		&& a_flg != A_WALK8_Right && a_flg != A_WALK8_Left && a_flg != A_WALK12_Right && a_flg != A_WALK12_Left && a_flg != A_WALK14_Right && a_flg != A_WALK14_Left){
+		a_cnt2 = 0;
+	}
 	return 0;
 }
 
@@ -803,23 +833,18 @@ int MOVE::Move_GARI()
 			player.vx = 14;
 			houkou = 1;
 		}
-		else{
-			houkou = 2;
-		}
 		if (houkou == 0){
 			a_flg = A_JUMP_Left;
 		}
 		if (houkou == 1){
 			a_flg = A_JUMP;
 		}
-		if (houkou == 2){
-			a_flg = A_JUMP;
-		}
+		
 	}
 	/*****************************************/
 
 	/******タックル***************************/
-	if (x == 1){      //Xキーが押されたら
+	if (x == 1){ //Xキーが押されたら
 		player.c_flg = TACKLE;
 	}
 	if (player.c_flg == TACKLE){ //値のセット	
@@ -829,7 +854,14 @@ int MOVE::Move_GARI()
 
 	/*****タックルの終了*******/
 	if (player.c_flg == TACKLE_STOP){
-		player.vx += player.attack_x;
+		if (houkou == 0){
+			player.vx -= player.attack_x + 10;
+		}
+		if (houkou == 1){
+			player.vx += player.attack_x;
+		}
+
+
 		player.attack_mukou -= 5;//次のXキーの入力待ち時間
 		player.attack_x -= 5;	//タックルの減速値
 
@@ -844,13 +876,10 @@ int MOVE::Move_GARI()
 			player.c_flg = STAND;
 		}
 
+		if (houkou == 1)a_flg = A_TACKLE;
+		if (houkou == 0)a_flg = A_TACKLE_Left;
+	}
 
-		a_flg = A_TACKLE;
-	}
-	if (*Oil < 0){  //オイルゲージが0の時はタックルは不可
-		*Oil = 0;
-		player.attack_x = 0;
-	}
 	/****************************************/
 
 
