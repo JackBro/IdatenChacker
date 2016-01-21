@@ -1,42 +1,34 @@
-#pragma once
 #include "timer.h"
 #include"debugmsg.h"
-#include"Option.h"
+#include "ranking.h"
 
 Timer::Timer()
 {
-	cnt = 0;
-	min_cnt = 0;
-	sec_cnt = 0;
 }
+
+void Timer::StartTimer(HDC hdc){
+	timewindows = GetTickCount();
+	return;
+}
+
+void Timer::ShowTime(HDC hdc){
+	S_time = (timewindows / 100) / 10.0 - (timestart / 100) / 10.0;					//windows‹N“®-ƒvƒƒOƒ‰ƒ€‚ª‹N“®‚µ‚½
+
+	DebugStringFloatR("Time:%.1f•b", S_time, hdc, 850, 10, 40,-80);
+	return;
+}
+
+
 
 Timer::~Timer()
 {
+
 }
 
-int Timer::MainTimer(HDC hdc){
-	cnt += 3;
+void Timer::WindowsTimer(HDC hdc){
 
-	TCHAR disp_msg[100];
-	wsprintf((LPWSTR)disp_msg, TEXT("‚s‚h‚l‚dF%3d:%2d"), cnt / 100, cnt%100);
-	Str_Put(hdc, WINDOW_WIDTH-240, 10, 25, RGB(255, 255, 255), disp_msg);
-	//DebugStringVal("‚s‚h‚l‚dF%3d", cnt/100, hdc, 920, 10, 25);
-	//DebugStringVal(":%d", cnt%100, hdc, 1050, 10, 25);
+	timestart = GetTickCount();			//windows‹N“®‚©‚ç‚ÌŠÔ
 
-	sec_cnt = cnt / 100;
-	min_cnt = cnt % 100;
-	return 0;
+	return;
 }
 
-// Œv‘ªŠJn
-//void Start(clock_t* pStart)
-//{
-//	*pStart = clock();
-//}
-//
-// Œo‰ßŠÔ(msec)
-//clock_t Elapse(clock_t ctStart)
-//{
-//	return (clock_t)((double)(clock() - ctStart) / (double)(CLOCKS_PER_SEC / 1000.0f));
-//}
-//

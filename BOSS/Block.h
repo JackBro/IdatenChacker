@@ -3,7 +3,7 @@
 #include"player_info.h"
 #include "block_info.h"
 #include<memory>
-#include"debugmsg.h"
+//#include"debugmsg.h"
 #include"Option.h"
 #include<vector>
 
@@ -19,17 +19,17 @@ class Block{
 	HDC blockhdc;
 	//床とか壁に使うブロック
 	BYTE key_buff[256];
-	HBITMAP hb_block = (HBITMAP)LoadImage(NULL, TEXT("sozai01.bmp"), IMAGE_BITMAP,
+	HBITMAP hb_block = (HBITMAP)LoadImage(NULL, TEXT("res/Block/normal.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
 		//破壊できるブロック
-	HBITMAP hc_block = (HBITMAP)LoadImage(NULL, TEXT("sozai02.bmp"), IMAGE_BITMAP,
+	HBITMAP hc_block = (HBITMAP)LoadImage(NULL, TEXT("res/Block/breaker.bmp"), IMAGE_BITMAP,
 	0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
 	     
 	//ゴールテープ
-	HBITMAP gorl = (HBITMAP)LoadImage(NULL, TEXT("Sikaku.bmp"), IMAGE_BITMAP,
+	HBITMAP gorl = (HBITMAP)LoadImage(NULL, TEXT("res/Block/Sikaku.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
 	//フラッグ（スタート地点）
-	HBITMAP flag = (HBITMAP)LoadImage(NULL, TEXT("flag.bmp"), IMAGE_BITMAP,
+	HBITMAP flag = (HBITMAP)LoadImage(NULL, TEXT("res/Block/flag.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);	// ビットマップハンドル
 
 	//char MAPDATA[MAP_HEIGHT][MAP_WIDTH];
@@ -77,6 +77,7 @@ public:
 	//ブロック（ステージの座標を取得）
 	int get_block_X();
 	int get_block_Y();
+
 	    
 };
 

@@ -13,12 +13,11 @@
 
 #define BOSS_STAGE_WIDTH 220
 #define BOSS_STAGE_HEIGHT 48
-  
+
 #define CHIP_SIZE   30   //一つのブロックのサイズ 
 
 #define PLAYER_HEIGHT 640
 #define PLAYER_WIDTH  1280
-
 
 //画面サイズは１６：９
 #define WINDOW_WIDTH	(16*70)					//画面横サイズ 1120
@@ -40,14 +39,10 @@
 
 
 //敵
-//#define ENEMYMAX 4
+#define ENEMYMAX 4
 #define ENEMY_SPAWN_INTERVAL 100
 
 //アイテム
 #define ITEM_SPAWN_INTERVAL 80
 
-//BOSS
-#define Atack_Interval 60
-#define Atack_Keep 70
-enum Scene{ Title, End, Stage1, Stage2, Boss };
-enum ATACK{STOP,Thender,Rain,Wind};
+enum Scene{ Title, End, Stage1,Stage2, Boss};
