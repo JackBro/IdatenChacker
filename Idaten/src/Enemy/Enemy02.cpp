@@ -6,14 +6,14 @@ Enemy02::Enemy02(int x,int y)
 	init();
 	enemy.x = x;
 	enemy.y = y;
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bomb/1.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	enemy_hbList = new HBITMAP[3];
 	enemy_hbList[0] = enemy_hb;
-	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bomb/2.bmp"), IMAGE_BITMAP,
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/2.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bomb/3.bmp"), IMAGE_BITMAP,
+	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bomb/3.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 

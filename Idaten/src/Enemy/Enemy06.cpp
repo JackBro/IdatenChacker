@@ -6,17 +6,17 @@ Enemy06::Enemy06(int x,int y)
 	enemy.x = x;
 	enemy.y = y;
 	init();
-	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bucket/1.bmp"), IMAGE_BITMAP,
+	enemy_hb = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/1.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	enemy_hbList = new HBITMAP[4];
 
 	enemy_hbList[0] = enemy_hb;
-	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bucket/2.bmp"), IMAGE_BITMAP,
+	enemy_hbList[1] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/2.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bucket/3.bmp"), IMAGE_BITMAP,
+	enemy_hbList[2] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/3.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	enemy_hbList[3] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy_H/bucket/4.bmp"), IMAGE_BITMAP,
+	enemy_hbList[3] = (HBITMAP)LoadImage(NULL, TEXT("res/Enemy/bucket/4.bmp"), IMAGE_BITMAP,
 		0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 	flg = 0;

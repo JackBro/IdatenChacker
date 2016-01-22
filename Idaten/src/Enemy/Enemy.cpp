@@ -21,12 +21,12 @@ Enemy::Enemy(){
 	enemy_bullet.onActive = 0;
 
 	SEDAMAGE.lpstrDeviceType = L"WaveAudio";
-	SEDAMAGE.lpstrElementName = L"click.wav";
+	SEDAMAGE.lpstrElementName = L"res/SE/click.wav";
 	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
 
 
 	SETAKED.lpstrDeviceType = L"WaveAudio";
-	SETAKED.lpstrElementName = L"../res/SE/click.wav";
+	SETAKED.lpstrElementName = L"res/SE/click.wav";
 	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
 
 
