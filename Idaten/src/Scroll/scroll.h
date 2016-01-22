@@ -39,7 +39,7 @@ public:
 			Backimg_y = -(48 * CHIP_SIZE - 350);
 			blMaxvol_x = STAGE2_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
 			blMaxvol_y = STAGE2_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE;
-			hb_all = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/îwåi2.bmp"), IMAGE_BITMAP,
+			hb_all = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/îwåi.bmp"), IMAGE_BITMAP,
 				0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		}
 		else if (sNum == Boss){

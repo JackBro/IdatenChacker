@@ -1,9 +1,0 @@
-diff a/Idaten/src/Main.cpp b/Idaten/src/Main.cpp	(rejected hunks)
-@@ -150,6 +150,7 @@
- 		Paint(hdc_back);				// Paint関数へ
- 
- 		//バックバッファに保存された画像を表画面に描画
-+		BitBlt(hdc, 0, 0, 1100, 500, hdc_back, 0, 0, SRCCOPY);
- 
- 
- 

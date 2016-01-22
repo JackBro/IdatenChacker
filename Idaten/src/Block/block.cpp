@@ -274,8 +274,12 @@ float Block::block_kansu(HDC hdc){
 
 	int blxp = BLOCK_PAINT_X + dx;
 	int blyp = BLOCK_PAINT_Y + dy;
-	if (blyp >= MAP_HEIGHT - 1) blyp = MAP_HEIGHT - 1;
-
+	if (s1 == Boss){
+		if (blyp >= BOSS_STAGE_HEIGHT- 1) blyp = BOSS_STAGE_HEIGHT - 1;
+	}
+	else {
+		if (blyp >= MAP_HEIGHT - 1) blyp = MAP_HEIGHT - 1;
+	}
 
 	for (int i = dx, a = 0; i <= blxp; i++, a++){
  		for (int j = dy, b = 0; j <= blyp; j++, b++){

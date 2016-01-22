@@ -6,10 +6,10 @@
 
 #include"MasterCloud.h"
 
-#include"../player_info.h"
-#include"../Option.h"
+#include"../Charactor/player_info.h"
+#include"../_Option/Option.h"
 
-#include"../debugmsg.h"
+#include"../_Option/debugmsg.h"
 
 class BossManager
 {

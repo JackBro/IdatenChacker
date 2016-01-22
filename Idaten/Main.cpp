@@ -10,6 +10,8 @@
 
 
 //要素
+#include"src/Boss/BossManager.h"
+
 #include "src/Enemy/EnemyManager.h"
 #include "src/Item/ItemManager.h"
 #include"src/Scroll/scroll.h"
@@ -21,7 +23,7 @@
 
 //ツール系
 #ifdef _DEBUG_MODE
-#include"Framerate\FrameRate.h"
+#include"src/Framerate\FrameRate.h"
 #endif _DEBUG_MODE_
 
 #include"src/_Option/debugmsg.h"
@@ -84,6 +86,8 @@ PAINT *paint_player_obj;
 Scroll *scrobj;
 Block *blobj;
 EnemyManager *eobj;
+BossManager *bsobj;
+
 
 ItemManager *iobj;
 Timer *timeobj;
@@ -494,9 +498,25 @@ int Paint(HDC hdc)
 			delete iobj;
 			iobj = new ItemManager(SceneNum);
 			
+			delete eobj;
+			if (SceneNum == Stage1 || SceneNum == Stage2){
+				eobj = new EnemyManager(SceneNum);
+			}
+			delete bsobj;
+			if (SceneNum == Boss){
+				bsobj = new BossManager(SceneNum);
+			}
+
+			delete iobj;
+			iobj = new ItemManager(SceneNum);
+			if (SceneNum == Stage2){
 				paint_player_obj->obj2->player.x = 120;
 				paint_player_obj->obj2->player.y = 420;
-			
+			}
+			if (SceneNum == Boss){
+				paint_player_obj->obj2->player.x = 150;
+				paint_player_obj->obj2->player.y = 600;
+			}			
 			sandstorm.End();
 
 			
@@ -593,13 +613,78 @@ int Paint(HDC hdc)
 
 		
 	}
-	
-	else if (SceneNum == Boss) {
-		if (cc > 10) {
-			SceneNum = End;
-			cc = 0;
+	else if (SceneNum == Boss){
 
-		}
+		paint_player_obj->obj2->C_sts(paint_player_obj->obj->c_sts, &paint_player_obj->obj->Oil_Gage);
+		paint_player_obj->obj2->Move();
+
+		//Scroll
+		scrobj->toPoint(&paint_player_obj->obj2->player);
+		scrobj->scroll_kansu(hdc);
+
+		blobj->toPoint(&paint_player_obj->obj2->player);
+		blobj->block_scroll(scrobj->Backimg_x, scrobj->Backimg_y);
+
+		blobj->block_kansu(hdc);	//値を受け取っていたら次へ
+
+		bsobj->chara_strc(&paint_player_obj->obj2->player);
+		bsobj->BOSS_SCROLL(scrobj->BackMoveX, scrobj->BackMoveY);
+		bsobj->STAGE_COOD(blobj->get_block_X(), blobj->get_block_Y());
+		bsobj->MAIN(hdc);
+
+		//acobj->chara_strc(&paint_player_obj->obj2->player);
+		//acobj->Atack_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
+		//acobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
+		//acobj->Main(hdc);
+
+		paint_player_obj->obj->Item(bsobj->GetDeadflag());		//アイテムを取得してゲージに変化があるか判断する(敵の場合は－１される）
+
+		bsobj->GetDeadflag(0);
+
+		//オイルゲージ量など更新処理
+		paint_player_obj->obj->Player_Sts();
+		paint_player_obj->obj->Oil_Sts();
+
+		//Item
+		iobj->chara_strc(&paint_player_obj->obj2->player);
+		iobj->item_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
+		iobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
+		iobj->MainThread(hdc);
+
+		paint_player_obj->obj->Item(iobj->GetItemtype());		//アイテムを取得してゲージに変化があるか判断する
+		//	DebugStringVal("%d", iobj->GetItemtype(), hdc, 300, 30, 20);
+
+		iobj->GetItemtype(0);	//値の初期化。　しないとバグが出ます＾ｑ＾
+
+		//オイルゲージ量など更新処理
+		paint_player_obj->obj->Player_Sts();
+		paint_player_obj->obj->Oil_Sts();
+
+
+		//オイルとそのゲージの描画
+		paint_player_obj->obj->Paint_Oil(hdc);
+		paint_player_obj->obj->Paint_Gage(hdc);
+
+		//移動量の最大値の抑制
+		if (paint_player_obj->obj2->player.vx < -10)paint_player_obj->obj2->player.vx = -10;
+		if (paint_player_obj->obj2->player.vy > 10)	paint_player_obj->obj2->player.vy = 10;
+
+		paint_player_obj->obj2->player.x += paint_player_obj->obj2->player.vx;
+		paint_player_obj->obj2->player.y += paint_player_obj->obj2->player.vy;
+
+		//キャラが画面座標０より外へ出ないように抑制
+		if (paint_player_obj->obj2->player.x < 0)	paint_player_obj->obj2->player.x = 0;
+		if (paint_player_obj->obj2->player.y < 0)	paint_player_obj->obj2->player.y = 0;
+		//	DebugStringFloat("%f",paint_player_obj->obj2->player.y,hdc,200,200,20);
+
+		//以下描画処理
+		paint_player_obj->char_strc(&paint_player_obj->obj2->player);
+		paint_player_obj->Paint_Player(hdc);
+
+		timeobj->StartTimer(hdc);	//プログラムが開始された時の時間の習得
+		timeobj->ShowTime(hdc);
+		return 0;
+
 	}
 	else if (SceneNum == End){
 		Paint_BG(hdc,End);  //ed
