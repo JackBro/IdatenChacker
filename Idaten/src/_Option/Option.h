@@ -11,7 +11,9 @@
 #define STAGE2_WIDTH 320
 #define STAGE2_HEIGHT 48
 
-  
+#define BOSS_STAGE_WIDTH 220
+#define BOSS_STAGE_HEIGHT 48
+
 #define CHIP_SIZE   30   //一つのブロックのサイズ 
 
 #define PLAYER_HEIGHT 640

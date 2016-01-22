@@ -9,8 +9,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
-#include"timer.h"
-#include"debugmsg.h"
+#include"../Timer/timer.h"
+#include"../_Option/debugmsg.h"
 
 
 using std::string;

@@ -9,48 +9,49 @@
 
 
 class PAINT{
+
 	//HDC hdc;
 	//キャラクター
-	HBITMAP hb_Stand00 = (HBITMAP)LoadImage(NULL, TEXT("stand_000.bmp"),
+	HBITMAP hb_Stand00 = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/stand_000.bmp"),
 	    IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Stand00_Left = (HBITMAP)LoadImage(NULL, TEXT("stand_000_left.bmp"),
+	HBITMAP hb_Stand00_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/stand_000_left.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	
 
-	HBITMAP hb_Run00_Right = (HBITMAP)LoadImage(NULL, TEXT("run_000.bmp"),
+	HBITMAP hb_Run00_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_000.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run02_Right = (HBITMAP)LoadImage(NULL, TEXT("run_002.bmp"),
+	HBITMAP hb_Run02_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_002.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run04_Right = (HBITMAP)LoadImage(NULL, TEXT("run_004.bmp"),
+	HBITMAP hb_Run04_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_004.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run07_Right = (HBITMAP)LoadImage(NULL, TEXT("run_007.bmp"),
+	HBITMAP hb_Run07_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_007.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run11_Right = (HBITMAP)LoadImage(NULL, TEXT("run_011.bmp"),
+	HBITMAP hb_Run11_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_011.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run13_Right = (HBITMAP)LoadImage(NULL, TEXT("run_013.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-
-	HBITMAP hb_Run00_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_000.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run02_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_002.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run04_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_004.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run07_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_007.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run11_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_011.bmp"),
-		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Run13_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_013.bmp"),
+	HBITMAP hb_Run13_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_013.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	HBITMAP hb_Jump_Right = (HBITMAP)LoadImage(NULL, TEXT("run_007.bmp"),
+	HBITMAP hb_Run00_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_000.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Jump_Left = (HBITMAP)LoadImage(NULL, TEXT("run_left_007.bmp"),
+	HBITMAP hb_Run02_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_002.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_Run04_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_004.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_Run07_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_007.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_Run11_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_011.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_Run13_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_013.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
-	HBITMAP hb_Tackle00 = (HBITMAP)LoadImage(NULL, TEXT("tackle_007.bmp"),
+	HBITMAP hb_Jump_Right = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_007.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-	HBITMAP hb_Tackle01 = (HBITMAP)LoadImage(NULL, TEXT("tackle_007_left.bmp"),
+	HBITMAP hb_Jump_Left = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/run_left_007.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+
+	HBITMAP hb_Tackle00 = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/tackle_007.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_Tackle01 = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/tackle_007_left.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 
 public:

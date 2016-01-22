@@ -1,7 +1,7 @@
 #include <windows.h>
-#include"player_info.h"
-#include"debugmsg.h"
-#include"Option.h"
+#include"../Charactor/player_info.h"
+#include"../_Option/debugmsg.h"
+#include"../_Option/Option.h"
 
 
 class Scroll{
@@ -40,8 +40,6 @@ public:
 			blMaxvol_x = STAGE2_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
 			blMaxvol_y = STAGE2_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE;
 			hb_all = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/�w�i.bmp"), IMAGE_BITMAP,
-<<<<<<< HEAD
-=======
 				0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		}
 		else if (sNum == Boss){
@@ -50,7 +48,6 @@ public:
 			blMaxvol_x = MAP_WIDTH * CHIP_SIZE - BLOCK_PAINT_X * CHIP_SIZE - 30;
 			blMaxvol_y = MAP_HEIGHT * CHIP_SIZE - BLOCK_PAINT_Y * CHIP_SIZE - 90;
 			hb_all = (HBITMAP)LoadImage(NULL, TEXT("res/bgImage/sky.bmp"), IMAGE_BITMAP,
->>>>>>> 4b44a3b... ベースコミット
 				0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 		}
 
