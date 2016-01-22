@@ -8,28 +8,32 @@
 #include <time.h>   // time()を使うのに必要
 #include <assert.h>
 
+
 //要素
-#include "Enemy\EnemyManager.h"
-#include "Item\ItemManager.h"
-#include"scroll.h"
-#include"Block.h"
-#include"timer.h"
-#include"Ranking.h"
-#include"SandStorm\SandStrom.h"
+#include "src/Enemy/EnemyManager.h"
+#include "src/Item/ItemManager.h"
+#include"src/Scroll/scroll.h"
+#include"src/Block/Block.h"
+#include"src/Timer/timer.h"
+#include"src/Ranking/Ranking.h"
+#include"src/SandStorm/SandStrom.h"
 
 
 //ツール系
+#ifdef _DEBUG_MODE
 #include"Framerate\FrameRate.h"
-#include"debugmsg.h"
+#endif _DEBUG_MODE_
+
+#include"src/_Option/debugmsg.h"
 #include<Thread>
 #include<mmsystem.h>
 
 //chara
-#include "Paint_Player.h"
-#include"player_info.h"
+#include "src/Charactor/Paint_Player.h"
+#include"src/Charactor/player_info.h"
 
 //設定等
-#include"Option.h"
+#include"src/_Option/Option.h"
 
 
 static MCI_OPEN_PARMS mop;
@@ -60,7 +64,7 @@ int Init_Game();
 int Get_Key(int);
 int SceneChanger();
 
-double S_time;			//タイム
+float S_time;			//タイム
 char namae[15];
 static int flag2 = OFF;
 static int flag3 = OFF;
@@ -87,8 +91,13 @@ Ranking_Name rankobj;
 
 
 SandStrom sandstorm;
+
+#ifdef DEBUG_MODE_
+
+
 FrameRate frr;
 
+#endif // DEBUG_MODE
 
 
 
@@ -268,8 +277,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		mpp.dwCallback = (DWORD)hWnd;
 
 		mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
-
+		
+#ifdef _DEBUG_MODE
 		frr.SetSampleNum(100);
+#endif // _DEBUG_MODE
 		Init_Game();
 
 		// 描画の開始
@@ -622,8 +633,12 @@ int Paint(HDC hdc)
 		
 	}
 	cc++;
-	//DebugStringFloat("%2.2f", frr.GetFrameRate() / 10, hdc, 100, 50, 22);
+#ifdef _DEBUG_MODE
 
+
+	DebugStringFloat("%2.2f", frr.GetFrameRate() / 10, hdc, 100, 50, 22);
+
+#endif // _DEBUG_MODE
 
 	return 0;
 }
