@@ -5,10 +5,10 @@
 #include <math.h>	
 #include <time.h>   
 
-#include"../player_info.h"
+#include"../Charactor/player_info.h"
 
 //#include"../debugmsg.h"
-#include"../Option.h"
+#include"../_Option/Option.h"
 
 #include<mmsystem.h>
 #pragma comment(lib,"winmm.lib")

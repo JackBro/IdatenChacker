@@ -1,6 +1,6 @@
 #pragma once
 #include<Windows.h>
-#include"../player_info.h"
+#include"../Charactor/player_info.h"
 #include<memory>
 #include<vector>
 #include<math.h>
@@ -10,9 +10,8 @@
 #include"Itemclass.h"
 
 #include"Itemupper.h"
-#include"Itemdowner.h"
-#include"../debugmsg.h"
-#include"../Option.h"
+#include"../_Option/debugmsg.h"
+#include"../_Option/Option.h"
 
 
 /*

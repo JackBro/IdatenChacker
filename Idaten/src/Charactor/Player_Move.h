@@ -3,11 +3,7 @@
 #include"player_info.h"
 #include"Player_Status.h"
 
-#include"debugmsg.h"
-
-
-
-
+#include"../_Option/debugmsg.h"
 
 
 

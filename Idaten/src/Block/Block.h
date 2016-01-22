@@ -1,10 +1,10 @@
 #pragma once
 #include<Windows.h>
-#include"player_info.h"
-#include "block_info.h"
+#include"../Charactor/player_info.h"
+#include "../Block/block_info.h"
 #include<memory>
-#include"debugmsg.h"
-#include"Option.h"
+#include"../_Option/debugmsg.h"
+#include"../_Option/Option.h"
 #include<vector>
 
 

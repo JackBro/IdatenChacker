@@ -1,6 +1,6 @@
 #include "timer.h"
-#include"debugmsg.h"
-#include "ranking.h"
+#include"../_Option/debugmsg.h"
+#include "../Ranking/ranking.h"
 
 Timer::Timer()
 {
