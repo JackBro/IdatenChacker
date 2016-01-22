@@ -25,6 +25,9 @@ ItemManager::ItemManager(int num) {
 	else if (num == Stage2) {
 		Maxitem = 13;
 	}
+	else if (num == Boss){
+		Maxitem = 9;
+	}
 
 	SetSpawnPoint();
 
@@ -141,6 +144,29 @@ void ItemManager::SetSpawnPoint(){
 		}
 		maps_x = 0;
 		maps_y = -(44 * CHIP_SIZE - 350);
+	}
+	else if (stageID == Boss) {
+		int xy[9][2] = {
+			{ 63 * CHIP_SIZE, 14 * CHIP_SIZE },
+			{ 30 * CHIP_SIZE, 42 * CHIP_SIZE },
+			{ 89 * CHIP_SIZE, 22 * CHIP_SIZE },
+			{ 97 * CHIP_SIZE, 41 * CHIP_SIZE },
+			{ 123 * CHIP_SIZE, 6 * CHIP_SIZE },
+			{ 128 * CHIP_SIZE, 40 * CHIP_SIZE },
+			{ 142 * CHIP_SIZE, 13 * CHIP_SIZE },
+			{ 149 * CHIP_SIZE, 23 * CHIP_SIZE },
+			{ 186 * CHIP_SIZE, 42 * CHIP_SIZE }
+		};
+		std::vector<int>n;
+		for (int j = 0; j < 9; j++) {
+			for (int i = 0; i < 2; i++) {
+				n.push_back(xy[j][i]);
+			}
+			Stage_Spawnpoint.push_back(n);
+			n.clear();
+		}
+		maps_x = 0;
+		maps_y = -(30 * CHIP_SIZE - 350);
 
 	}
 
