@@ -3,8 +3,8 @@
 #include<Windows.h>
 #include<math.h>
 #include<time.h>
-#include"../player_info.h"
-#include"../Option.h"
+#include"../Charactor/player_info.h"
+#include"../_Option/Option.h"
 
 class AtackClass
 {
@@ -22,7 +22,7 @@ protected:
 	struct atack_info{
 		float x, y;
 		int width, height;
-		int onactive;
+		int onActive;
 
 	}atack;
 
@@ -34,8 +34,10 @@ public:
 
 	int hit_atackcheck();
 
-	int get_deadflg(int){ return DEADflg; }
-	int get_atack_active(){ return atack.onactive; }
+	int get_deadflg(){ return DEADflg; }
+	void get_deadflg(int a){ DEADflg = a; }
+
+	int get_atack_active(){ return atack.onActive; }
 
 	void AtackID(int a) { atackID = a; }
 	int AtackID() { return atackID; }

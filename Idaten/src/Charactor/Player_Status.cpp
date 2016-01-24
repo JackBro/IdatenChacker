@@ -5,7 +5,7 @@
 
 void OIL::Item(int a)
 {
-	if (a == 1 || a == -1){
+	if (a == 1 || a == -1 || a == -2){
 		Oil_Gage += a;
 	}
 	if (Oil_Gage > 5){

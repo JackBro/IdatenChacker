@@ -7,7 +7,7 @@ AtackClass::AtackClass()
 	atack.y = 0;
 	atack.width = 0;
 	atack.height = 0;
-	atack.onactive = 0;
+	atack.onActive = 0;
 	atackID = 0;
 }
 
@@ -21,7 +21,7 @@ int AtackClass::Atack_Paint(HDC hdc){
 
 	atackhdc = hdc;
 
-	if (atack.onactive & 1){
+	if (atack.onActive & 1){
 		HDC hdc_work;
 		hdc_work = CreateCompatibleDC(hdc);
 		SelectObject(hdc_work, atack_hb);
@@ -41,7 +41,7 @@ int AtackClass::chara_strc(player_info *tp)
 
 int AtackClass::hit_atackcheck()
 {
-	if (atack.onactive & 1 && atack.onactive > 0){
+	if (atack.onActive & 1 && atack.onActive > 0){
 		int ex = atack.x;
 		int ey = atack.y;
 		int ew = ex + atack.width;
@@ -53,11 +53,9 @@ int AtackClass::hit_atackcheck()
 
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2){
-				if (ey <= ph - 10){
-					atack.onactive = 0;
 					DEADflg = -2;
-				}
 			}
+			atack.onActive = 0;
 		}
 	}
 	return 0;
@@ -65,8 +63,8 @@ int AtackClass::hit_atackcheck()
 
 int AtackClass::atack_scroll(int x,int y)
 {
-	atack.x = x;
-	atack.y = y;
+	atack.x += x;
+	atack.y += y;
 	return 0;
 }
 

@@ -7,10 +7,13 @@
 #include <math.h>	// atan2()を使うために必要
 #include <time.h>   // time()を使うのに必要
 #include <assert.h>
-
+#include<memory>
+//設定等
+#include"src/_Option/Option.h"
 
 //要素
 #include"src/Boss/BossManager.h"
+#include"src/Boss/BossAtackManager.h"
 
 #include "src/Enemy/EnemyManager.h"
 #include "src/Item/ItemManager.h"
@@ -20,10 +23,10 @@
 #include"src/Ranking/Ranking.h"
 #include"src/SandStorm/SandStrom.h"
 
-
 //ツール系
 #ifdef _DEBUG_MODE
-#include"src/Framerate\FrameRate.h"
+#include"src/_Option/ConsoleWindow.h"
+#include"src/Framerate/FrameRate.h"
 #endif _DEBUG_MODE_
 
 #include"src/_Option/debugmsg.h"
@@ -34,8 +37,6 @@
 #include "src/Charactor/Paint_Player.h"
 #include"src/Charactor/player_info.h"
 
-//設定等
-#include"src/_Option/Option.h"
 
 
 static MCI_OPEN_PARMS mop;
@@ -82,23 +83,21 @@ BYTE key_input_buff;// キーボード情報
 BYTE key_buff[256];
 
 
-PAINT *paint_player_obj;
-Scroll *scrobj;
-Block *blobj;
-EnemyManager *eobj;
-BossManager *bsobj;
+std::shared_ptr<PAINT>paint_player_obj;
+std::shared_ptr<Scroll>scrobj;
+std::shared_ptr<Block>blobj;
+std::shared_ptr<EnemyManager>eobj;
+std::shared_ptr<BossManager>bsobj;
+std::shared_ptr<BossAtackManager>bsAtkobj;
 
-
-ItemManager *iobj;
-Timer *timeobj;
+std::shared_ptr<ItemManager>iobj;
+std::shared_ptr<Timer>timeobj;
 Ranking_Name rankobj;
 
 
 SandStrom sandstorm;
 
-#ifdef DEBUG_MODE_
-
-
+#ifdef _DEBUG_MODE
 FrameRate frr;
 
 #endif // DEBUG_MODE
@@ -284,6 +283,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		
 #ifdef _DEBUG_MODE
 		frr.SetSampleNum(100);
+		aetherClass::ConsoleWindow::Create();		
 #endif // _DEBUG_MODE
 		Init_Game();
 
@@ -310,6 +310,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:	// 最後にウインドウが閉じられた時の処理
 		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 		// デバイスコンテキストの解放
+#ifdef _DEBUG_MODE
+		aetherClass::ConsoleWindow::Close();
+#endif // _DEBUG_MODE
+
 		DeleteDC(hdc_back);
 		DeleteObject(hb_back);
 		DeleteObject(menu_hb);
@@ -452,20 +456,14 @@ int Paint(HDC hdc)
 
 
 					SceneChanger();
-					eobj = new EnemyManager(SceneNum);
-					iobj = new ItemManager(SceneNum);
-					scrobj = new Scroll(SceneNum);
-					blobj = new Block(SceneNum);
-					paint_player_obj = new(PAINT);
-					//oilobj = new(OIL);
-					//paint_player_obj->obj2 = new(MOVE);
+					eobj = std::make_shared< EnemyManager>(SceneNum);
+					iobj = std::make_shared< ItemManager>(SceneNum);
+					scrobj = std::make_shared< Scroll>(SceneNum);
+					blobj = std::make_shared< Block>(SceneNum);
+					paint_player_obj = std::make_shared<PAINT>();
 
-					timeobj = new(Timer);
+					timeobj = std::make_shared<Timer>();
 					timeobj->WindowsTimer(hdc);		//windowsの起動からの時間の習得
-					/*if (SceneNum == Boss)
-					{
-					bsobj = new BossManager(SceneNum);
-					}*/
 				}
 			}
 		}
@@ -487,28 +485,30 @@ int Paint(HDC hdc)
 		
 
 			SceneNum *= -1;	//マイナスの値になってるSceneNumを戻す
-			delete scrobj;
-			scrobj = new Scroll(SceneNum);
+			scrobj.reset();
+			scrobj = std::make_shared< Scroll>(SceneNum);
 
-			delete blobj;
-			blobj = new Block(SceneNum);
+			blobj.reset();
+			blobj = std::make_shared< Block>(SceneNum);
 
-			delete eobj;
-				eobj = new EnemyManager(SceneNum);
-			delete iobj;
-			iobj = new ItemManager(SceneNum);
+			eobj.reset();
+			eobj = std::make_shared< EnemyManager>(SceneNum);
+			iobj.reset();
+			iobj = std::make_shared< ItemManager>(SceneNum);
 			
-			delete eobj;
+			eobj.reset();
 			if (SceneNum == Stage1 || SceneNum == Stage2){
-				eobj = new EnemyManager(SceneNum);
+				eobj = std::make_shared< EnemyManager>(SceneNum);
 			}
-			delete bsobj;
+			bsobj.reset();
 			if (SceneNum == Boss){
-				bsobj = new BossManager(SceneNum);
+				bsobj = std::make_shared< BossManager>();
+				bsAtkobj = std::make_shared<BossAtackManager>();
+
 			}
 
-			delete iobj;
-			iobj = new ItemManager(SceneNum);
+			iobj.reset();
+			iobj = std::make_shared< ItemManager>(SceneNum);
 			if (SceneNum == Stage2){
 				paint_player_obj->obj2->player.x = 120;
 				paint_player_obj->obj2->player.y = 420;
@@ -627,19 +627,26 @@ int Paint(HDC hdc)
 
 		blobj->block_kansu(hdc);	//値を受け取っていたら次へ
 
+
 		bsobj->chara_strc(&paint_player_obj->obj2->player);
 		bsobj->BOSS_SCROLL(scrobj->BackMoveX, scrobj->BackMoveY);
 		bsobj->STAGE_COOD(blobj->get_block_X(), blobj->get_block_Y());
-		bsobj->MAIN(hdc);
-
-		//acobj->chara_strc(&paint_player_obj->obj2->player);
-		//acobj->Atack_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
-		//acobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
-		//acobj->Main(hdc);
-
-		paint_player_obj->obj->Item(bsobj->GetDeadflag());		//アイテムを取得してゲージに変化があるか判断する(敵の場合は－１される）
-
+		int IsEnd = bsobj->MAIN(hdc);
+		paint_player_obj->obj->Item(bsobj->GetDeadflag());
 		bsobj->GetDeadflag(0);
+
+		if (IsEnd == End){
+			SceneNum = End;
+			return 0;
+		}
+		
+		bsAtkobj->chara_strc(&paint_player_obj->obj2->player);
+		bsAtkobj->Atack_scroll(scrobj->BackMoveX, scrobj->BackMoveY);
+		bsAtkobj->stage_coord(blobj->get_block_X(), blobj->get_block_Y());
+		bsAtkobj->Main(hdc);
+		paint_player_obj->obj->Item(bsAtkobj->GetDeadflag());
+		bsAtkobj->GetDeadflag(0);
+		
 
 		//オイルゲージ量など更新処理
 		paint_player_obj->obj->Player_Sts();
@@ -700,19 +707,37 @@ int Paint(HDC hdc)
 		if (cc > 50){
 			cc = Get_Key(cc);
 			if (cc == 1){
-				mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+ 				mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 
 				mop.lpstrElementName = L"res/Sound/title.wav";
 				mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 				mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
 
 				SceneChanger();
-				delete eobj;
-				delete iobj;
-				delete scrobj;
-				delete blobj;
-				delete paint_player_obj;
-				delete timeobj;
+				if (eobj){
+					eobj.reset();
+				}
+				if (iobj){
+					iobj.reset();
+				}
+				if (scrobj){
+					scrobj.reset();
+				}
+				if (blobj){
+					blobj.reset();
+				}
+				if (paint_player_obj){
+					paint_player_obj.reset();
+				}
+				if (timeobj){
+					timeobj.reset();
+				}
+				if (bsobj){
+					bsobj.reset();
+				}
+				if (bsAtkobj){
+					bsAtkobj.reset();
+				}
 			}
 		}
 		

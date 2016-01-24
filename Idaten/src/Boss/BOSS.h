@@ -12,11 +12,17 @@
 
 class BOSS
 {
+public:
+	enum BossState{
+		MOVE,
+		ATTACK
+	};
 protected:
 	HDC bosshdc;
 
-	HBITMAP boss_hb;
-	HBITMAP wind_hb;
+	HBITMAP boss_hb[2];
+
+	int state;
 
 	int DEADflg = 0;	//“G‚ÆƒLƒƒƒ‰ƒNƒ^[‚ªÚG‚µ‚½ê‡‚É^i-‚PjƒQ[ƒW‚ğ’¼Ú‚¢‚¶‚é‚Ì‚Å|‚P
 	int bossID;
@@ -24,13 +30,7 @@ protected:
 
 	player_info *plstats;
 
-	struct wind_info{
-
-		int x,y;
-		int dx;
-		int width, height;
-		int active;
-	}wind;
+	int scroll_x, scroll_y;
 
 	struct boss_info{
 		int x, y;
@@ -51,7 +51,6 @@ protected:
 public:
 
 	int BOSS_paint(HDC boss_hb);
-	int Wind_paint();
 	int chara_strc(player_info *tp);
 
 	int hit_bosscheck();
@@ -61,6 +60,8 @@ public:
 	int BOSSID() { return bossID; }
 
 	int get_deadflg(){ return DEADflg; }
+	void get_deadflg(int deadFlg){ DEADflg = deadFlg; }
+
 	int get_boss_active(){ return boss.active; }
 
 	int boss_scroll(int, int);

@@ -1,6 +1,6 @@
 #pragma once
 #include<Windows.h>
-#include"../player_info.h"
+#include"../Charactor/player_info.h"
 #include<memory>
 #include<vector>
 #include<math.h>
@@ -8,8 +8,8 @@
 #include"AtackClass.h"
 #include"BossAtack.h"
 
-#include"../Option.h"
-#include"../debugmsg.h"
+#include"../_Option/Option.h"
+#include"../_Option/debugmsg.h"
 class BossAtackManager
 {
 
@@ -52,7 +52,6 @@ public:
 
 	void Main(HDC);
 	BossAtackManager();
-	BossAtackManager(int);
 	~BossAtackManager();
 };
 

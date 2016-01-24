@@ -3,18 +3,9 @@
 
 BossManager::BossManager()
 {
-	stageID = Boss;
 	deadflg = 0;
 	SET_POINT();
-
-}
-
-BossManager::BossManager(int num)
-{
-	stageID = num;
-	deadflg = 0;
-
-	SET_POINT();
+	AlreadySpawn = false;
 
 }
 
@@ -32,27 +23,32 @@ int BossManager::POP_BOSS(){
 	bsobj->BOSSID(0);
 	return 0;
 }
-void BossManager::MAIN(HDC hdc){
+int BossManager::MAIN(HDC hdc){
+
 
 	bosshdc = hdc;
-	POP_BOSS();
-
-	for (int i = 0; i < 1;i++){
+	if (!AlreadySpawn){
+		POP_BOSS();
+		AlreadySpawn = true;
+	}
+	if (bsobj){
 		int ex = bsobj->Boss_x(), ey = bsobj->Boss_y();
 
+		bsobj->boss_scroll(scroll_x, scroll_y);
 		bsobj->chara_strc(plstats);
-		bsobj->move_boss(hdc);
-		bsobj->BOSS_paint(hdc);
+		if (ex > 0 - 30 && ey > 0 - 30 && ex < WINDOW_WIDTH + 100 && ey < WINDOW_HEIGHT + 100){
+			bsobj->move_boss(hdc);
+			bsobj->BOSS_paint(hdc);
+		}
 
 		if (bsobj->get_deadflg()){
 			GetDeadflag(bsobj->get_deadflg());
 		}
 		if (bsobj->get_boss_active() == 0){
-			stageID = End;
-			
+			return End;
 		}
-	
 	}
+	return 0;
 	
 }
 
@@ -101,6 +97,7 @@ int BossManager::GetDeadflag(){
 int BossManager::GetDeadflag(int a){
 	if (a == 0 || a == 1 || a == -1){
 		deadflg = a;
+		bsobj->get_deadflg(0);
 	}
 	return 0;
 }

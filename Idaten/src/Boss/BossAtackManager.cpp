@@ -3,19 +3,6 @@
 
 BossAtackManager::BossAtackManager()
 {
-	stageID = Boss;
-	Max_Atack = 8;
-	Set_SpawnPoint();
-
-	for (int i = 0; i < Max_Atack; i++){
-		SpawnList.push_back(i);
-	}
-
-}
-
-BossAtackManager::BossAtackManager(int num)
-{
-	stageID = Boss;
 	Max_Atack = 8;
 	Set_SpawnPoint();
 
@@ -23,8 +10,9 @@ BossAtackManager::BossAtackManager(int num)
 		SpawnList.push_back(i);
 	}
 }
+
+
 BossAtackManager::~BossAtackManager(){
-
 }
 
 int BossAtackManager::SpawnAtack()
@@ -32,7 +20,8 @@ int BossAtackManager::SpawnAtack()
 	if (acobj.size() >= Max_Atack)
 		return -1;
 
-	int Get_SpawnPoint(SpawnList[0]);
+	Get_SpawnPoint(SpawnList[0]);
+
 
 	std::unique_ptr<AtackClass>obj(new BossAtack(SpawnPoint[0], SpawnPoint[1]));
 	obj->AtackID(SpawnList[0]);
@@ -53,7 +42,6 @@ void BossAtackManager::Main(HDC hdc)
 		cnt = 0;
 	}
 	cnt++;
-		//DebugStringVal("%d", SpawnPoint[0], hdc, 200, 250, 20);
 	
 
 	for (int i = 0; i < acobj.size(); i++)
@@ -62,10 +50,14 @@ void BossAtackManager::Main(HDC hdc)
 		acobj[i]->atack_scroll(scroll_x, scroll_y);
 		if (ex > 0 - 30 && ey > 0 - 30  && ex < WINDOW_WIDTH + 30 && ey < WINDOW_HEIGHT + 30)
 		{			
+
 			acobj[i]->chara_strc(plstats);
 			acobj[i]->move();
 			acobj[i]->Atack_Paint(hdc);
-
+			acobj[i]->hit_atackcheck();
+			if (acobj[i]->get_deadflg()){
+				GetDeadflag(acobj[i]->get_deadflg());
+			}
 			if (acobj[i]->get_atack_active() == 0)
 			{
 				SpawnList.push_back(acobj[i]->AtackID());
@@ -86,7 +78,7 @@ int BossAtackManager::chara_strc(player_info *tp)
 void BossAtackManager::Set_SpawnPoint()
 {
 	int xy[8][2]={
-		{ 194 * CHIP_SIZE, 42 * CHIP_SIZE },
+		{ 196 * CHIP_SIZE, 41 * CHIP_SIZE },
 		{ 155 * CHIP_SIZE, 25 * CHIP_SIZE },
 		{ 133 * CHIP_SIZE, 6 * CHIP_SIZE },
 		{ 124 * CHIP_SIZE, 16 * CHIP_SIZE },
@@ -135,11 +127,8 @@ int BossAtackManager::GetDeadflag()
 
 int BossAtackManager::GetDeadflag(int a)
 {
-	if (a == 0 || a == 1 || a == -1 ||a == 2){
+	if (a == 0 || a == 1 || a == -1 ||a == -2){
 		deadflg = a;
-		for (int i = 0; i < acobj.size(); i++){
-			acobj[i]->get_deadflg(a);
-		}
 	}
 	return 0;
 }

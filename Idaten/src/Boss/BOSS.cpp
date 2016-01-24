@@ -15,6 +15,7 @@ BOSS::BOSS()
 
 	bossID = 0;
 	stageID = 0;
+	state = MOVE;
 
 }
 int BOSS::chara_strc(player_info *tp){
@@ -36,17 +37,14 @@ int BOSS::hit_bosscheck(){
 		int ph = py + plstats->height;
 
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
-			if (plstats->c_flg != 3 && plstats->c_flg != 2){
-				if (ey <= ph - 10){
-					DEADflg = -1;
-					
-				}
-				
-				
+			if (plstats->c_flg == 3 || plstats->c_flg == 2){
+				boss.active = 0;
 			}
-			boss.active = 0;
-			plstats->vx = 0;
-			plstats->x -= 400;
+			else{
+				DEADflg = -1;
+				plstats->vx = 0;
+				plstats->x -= 400;
+			}
 		}
 
 	}
@@ -79,14 +77,11 @@ return 0;
 int BOSS::boss_scroll(int x, int y){
 	boss.x += x;
 	boss.y += y;
+	scroll_x = x;
+	scroll_y = y;
 	return 0;
 }
 
-int BOSS::wind_scroll(int x, int y){
-	wind.x += x;
-	wind.y += y;
-	return 0;
-}
 
 float BOSS::Boss_x(){
 	return boss.x;
@@ -103,7 +98,7 @@ int BOSS::BOSS_paint(HDC hdc){
 	if (boss.active & 1){
 		HDC hdc_work;
 		hdc_work = CreateCompatibleDC(hdc);
-		SelectObject(hdc_work, boss_hb);
+		SelectObject(hdc_work, boss_hb[state]);
 		int ex = boss.x;
 		int ey = boss.y;
 		TransparentBlt(hdc, ex, ey, boss.width, boss.height, hdc_work, 0, 0, 120, 180, RGB(0, 0, 255));
@@ -112,16 +107,7 @@ int BOSS::BOSS_paint(HDC hdc){
 	return 0;
 }
 
-int BOSS::Wind_paint(){
-	if (wind.active == 1){
-		HDC hdc_work;
-		hdc_work = CreateCompatibleDC(bosshdc);
-		SelectObject(hdc_work, wind_hb);
-		TransparentBlt(bosshdc, (int)wind.x, (int)wind.y, wind.width, wind.height, hdc_work, 0, 0, 30, 30, RGB(0, 0, 0));
-		DeleteDC(hdc_work);
-	}
-	return 0;
-}
+
 
 
 BOSS::~BOSS()

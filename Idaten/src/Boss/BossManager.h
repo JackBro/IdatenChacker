@@ -22,8 +22,7 @@ class BossManager
 	int maps_x, maps_y;
 
 	int deadflg;
-	int stageID;
-
+	bool AlreadySpawn;
 	int POP_BOSS();
 	int GET_POINT(int a);
 	void SET_POINT();
@@ -40,11 +39,10 @@ public:
 	int BOSS_SCROLL(int, int);
 	int STAGE_COOD(int, int);
 
-	void MAIN(HDC);
+	int MAIN(HDC);
 
 	int GetDeadflag();
 	int GetDeadflag(int);
 	BossManager();
-	BossManager(int);
 	~BossManager();
 };
