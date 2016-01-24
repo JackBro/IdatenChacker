@@ -1,6 +1,5 @@
 #pragma once
 #include "MasterCloud.h"
-
 MasterCloud::MasterCloud(int x, int y)
 {
 	init();
@@ -11,8 +10,8 @@ MasterCloud::MasterCloud(int x, int y)
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	boss_hb[ATTACK] = (HBITMAP)LoadImage(NULL, TEXT("res/BOSS/MasterCloud_attack.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
-
-	
+	boss_hb[DEATH] = (HBITMAP)LoadImage(NULL, TEXT("res/BOSS/MasterCloud_death.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 }
 
 
@@ -32,7 +31,7 @@ int MasterCloud::init(){
 	boss.width = 150;
 	boss.height = 180;
 
-	boss.max_cnt = 150;
+	boss.max_cnt = 120;
 	boss.move_cnt = 0;
 
 	boss.active = 1;
@@ -42,6 +41,9 @@ int MasterCloud::init(){
 }
 
 int  MasterCloud::move_boss(HDC hdc){
+	static	MCI_OPEN_PARMS se_open;
+	static	MCI_PLAY_PARMS se_playDevice;
+
 	srand((int)time(NULL));
 	static int Attack = 30;
 
@@ -57,23 +59,58 @@ int  MasterCloud::move_boss(HDC hdc){
 			boss.dy = -boss.step_y;
 		}
 		boss.y += boss.dy;
-	}if (state == ATTACK){
-		if (!m_wind){
-			m_wind = std::make_unique<AttackWind>(boss.x,boss.y+boss.height/2);
-		}		
 	}
-	if (m_wind){
-		m_wind->chara_strc(plstats);
-		m_wind->Scroll(scroll_x, scroll_y);
-		if (!m_wind->Update()){
-			m_wind.reset();
-			state = MOVE;
-			return 0;
+	else if (state == ATTACK){
+		if (!m_wind){
+			m_wind = std::make_unique<AttackWind>(boss.x, boss.y + boss.height / 2);
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			se_open.lpstrDeviceType = L"MPEGVideo";
+			se_open.lpstrElementName = L"res/SE/wind.mp3";
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
 		}
-		m_wind->Draw(hdc);
-		m_wind->IsHit();
-		DEADflg = m_wind->GetDeadflg();
-		m_wind->GetDeadflg(0);
+		if (m_wind){
+			m_wind->chara_strc(plstats);
+			m_wind->Scroll(scroll_x, scroll_y);
+			if (!m_wind->Update()){
+				m_wind.reset();
+				state = MOVE;
+				return 0;
+			}
+			m_wind->Draw(hdc);
+			m_wind->IsHit();
+			DEADflg = m_wind->GetDeadflg();
+			m_wind->GetDeadflg(0);
+		}
+	}
+	else if (state == DEATH){
+		static int cnt = 0;
+		if (m_wind){
+			m_wind.reset();
+			m_wind = nullptr;
+		}
+		
+		if (cnt % 10 == 0){
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			se_open.lpstrDeviceType = L"WaveAudio";
+			se_open.lpstrElementName = L"res/SE/tackle.wav";
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+		}
+		if (cnt > 100){
+			boss.active = 0;
+		}
+		else if (cnt > 60){
+			boss.y += 5;
+		}if (cnt % 2 == 0){
+			boss.x += 10;
+		}
+		else{
+			boss.x -= 10;
+		}
+
+
+		cnt++;
 	}
 	if (m_attackCnt > Attack){
 		state = ATTACK;
@@ -84,8 +121,11 @@ int  MasterCloud::move_boss(HDC hdc){
 		m_attackCnt++;
 	}
 
+#ifdef _DEBUG_MODE
 	DebugStringVal("%d", Attack, hdc, 200, 220, 20);
-	DebugStringVal("%d",m_attackCnt, hdc, 200, 200, 20);
+	DebugStringVal("%d", m_attackCnt, hdc, 200, 200, 20);
+#endif // _DEBUG_MODE
+
 	hit_bosscheck();
 	return 0;
 }

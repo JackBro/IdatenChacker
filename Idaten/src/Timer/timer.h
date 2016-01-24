@@ -6,6 +6,7 @@ class Timer {
 	DWORD timestart;	//プログラム起動時の時間
 	DWORD timewindows;	//windowsの起動からの時間
 
+
 public:
 	Timer();
 	~Timer();

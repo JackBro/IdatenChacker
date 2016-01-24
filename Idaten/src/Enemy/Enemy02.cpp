@@ -1,5 +1,5 @@
 #include "Enemy02.h"
-
+#include<iostream>
 
 Enemy02::Enemy02(int x,int y)
 {
@@ -83,9 +83,12 @@ int Enemy02::move_enemy(){
 	enemy.x += enemy.dx;
 	enemy.y += enemy.dy;
 
+	std::cout << enemy.onActive << "\n\n";
 	if (enemy.onActive == 5){
 		hit_enemycheckN();
-	}else
+	}
+	else if (enemy.onActive & 1){
 		hit_enemycheck();
+	}
 	return 0;
 }

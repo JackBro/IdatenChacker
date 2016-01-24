@@ -28,12 +28,6 @@
 
 class Enemy{
 protected:
-	MCI_OPEN_PARMS SEDAMAGE;
-	MCI_OPEN_PARMS SETAKED;
-
-	MCI_PLAY_PARMS SEENEMY;
-
-
 
 	int DEADflg = 0;	//敵とキャラクターが接触した場合に真（-１）ゲージを直接いじるので－１
 	int Jump = 0;		//ここでのみ使用する

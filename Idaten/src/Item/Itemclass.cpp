@@ -1,6 +1,7 @@
 #include "Itemclass.h"
 
 
+
 Itemclass::Itemclass()
 {
 	item.x = 0;
@@ -10,6 +11,7 @@ Itemclass::Itemclass()
 	item.onActive = 0;
 
 	itemID = 0;
+
 }
 
 
@@ -46,6 +48,8 @@ int Itemclass::chara_strc(player_info *tp){
 }
 
 int Itemclass::hit_itemcheck(){
+	static	MCI_OPEN_PARMS se_Item;
+	static	MCI_PLAY_PARMS se_playDevice;
 	if (item.onActive & 1){
 		//ìñÇΩÇËîªíËÅ@éläpå`
 		int ex = item.x;
@@ -59,6 +63,11 @@ int Itemclass::hit_itemcheck(){
 
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			item.onActive = 0;
+			mciSendCommand(se_Item.wDeviceID, MCI_CLOSE, 0, 0);
+			se_Item.lpstrDeviceType = L"WaveAudio";
+			se_Item.lpstrElementName = L"res/SE/item.wav";
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_Item);
+			mciSendCommand(se_Item.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
 			return itemtype;
 		}
 	}

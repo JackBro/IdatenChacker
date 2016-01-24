@@ -1,9 +1,11 @@
 #pragma once
 #include<Windows.h>
 #include"../Charactor/player_info.h"
-
+#include<mmsystem.h>
+#pragma comment(lib,"winmm.lib")
 class Itemclass{
 protected:
+
 		HDC itemhdc;
 		int itemtype;
 

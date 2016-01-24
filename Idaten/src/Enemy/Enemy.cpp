@@ -20,16 +20,6 @@ Enemy::Enemy(){
 
 	enemy_bullet.onActive = 0;
 
-	SEDAMAGE.lpstrDeviceType = L"WaveAudio";
-	SEDAMAGE.lpstrElementName = L"res/SE/click.wav";
-	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
-
-
-	SETAKED.lpstrDeviceType = L"WaveAudio";
-	SETAKED.lpstrElementName = L"res/SE/click.wav";
-	mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&SEDAMAGE);
-
-
 
 }
 
@@ -73,11 +63,9 @@ int Enemy::chara_strc(player_info *tp){
 }
 
 int Enemy::hit_enemycheck(){
-		static MCI_OPEN_PARMS SEDAMAGE;
-	static MCI_OPEN_PARMS SETAKED;
 
-	static MCI_PLAY_PARMS SEENEMY;
-
+	static	MCI_OPEN_PARMS se_open;
+	static	MCI_PLAY_PARMS se_playDevice;
 
 	if (enemy.onActive & 1 && enemy.onActive > 0){
 		//当たり判定　四角形
@@ -94,15 +82,24 @@ int Enemy::hit_enemycheck(){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2){
 				if (ey <= ph - 12){
 					DEADflg = -1;//??キャラに影響する 死亡の扱いは不明。
-					mciSendCommand(SEDAMAGE.wDeviceID, MCI_PLAY, 0, (DWORD)&SEENEMY);
+					mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+					se_open.lpstrDeviceType = L"WaveAudio";
+					se_open.lpstrElementName = L"res/SE/damage.wav";
+					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+					mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
 
-					
-				}else
+				}
+				else{
 					plstats->c_flg = 4;
-
+					mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+					se_open.lpstrDeviceType = L"WaveAudio";
+					se_open.lpstrElementName = L"res/SE/pop.wav";
+					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+					mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+				}
 			}
 			
-			enemy.onActive = -30;
+			enemy.onActive = 0;
 			enemy_bullet.onActive = 0;
 
 		}
@@ -114,6 +111,8 @@ int Enemy::hit_enemycheck(){
 }
 
 int Enemy::hit_enemycheckN(){
+	static	MCI_OPEN_PARMS se_Item;
+	static	MCI_PLAY_PARMS se_playDevice;
 	if (enemy.onActive & 1){
 		//当たり判定　四角形
 		int ex = enemy.x;
@@ -128,6 +127,7 @@ int Enemy::hit_enemycheckN(){
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			if (plstats->c_flg != 3 && plstats->c_flg != 2)
 				DEADflg = -1;//??キャラに影響する 死亡の扱いは不明。
+			enemy.onActive = 0;
 		}
 	}
 	return 0;

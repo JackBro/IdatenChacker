@@ -16,6 +16,8 @@ class OIL{
 	int gage;//オイルゲージのwidthを変更するための値
 	HBITMAP hb_OilGage = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/Oil.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
+	HBITMAP hb_OilGageback = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/Oilgauge.bmp"),
+		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 	HBITMAP hb_OilPower = (HBITMAP)LoadImage(NULL, TEXT("res/Charactor/OilPower.bmp"),
 		IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE | LR_CREATEDIBSECTION);
 

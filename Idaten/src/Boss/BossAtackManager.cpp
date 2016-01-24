@@ -49,7 +49,7 @@ void BossAtackManager::Main(HDC hdc)
 		int ex = acobj[i]->Atack_x(), ey = acobj[i]->Atack_y();
 		acobj[i]->atack_scroll(scroll_x, scroll_y);
 		if (ex > 0 - 30 && ey > 0 - 30  && ex < WINDOW_WIDTH + 30 && ey < WINDOW_HEIGHT + 30)
-		{			
+		{
 
 			acobj[i]->chara_strc(plstats);
 			acobj[i]->move();

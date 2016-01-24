@@ -38,7 +38,8 @@ int BOSS::hit_bosscheck(){
 
 		if (ex <= pw && px <= ew && ey <= ph && py <= eh){
 			if (plstats->c_flg == 3 || plstats->c_flg == 2){
-				boss.active = 0;
+				boss.active = -1;
+				state = DEATH;
 			}
 			else{
 				DEADflg = -1;
@@ -95,7 +96,7 @@ int BOSS::BOSS_paint(HDC hdc){
 
 	bosshdc = hdc;
 
-	if (boss.active & 1){
+	if (boss.active & 1 || state == DEATH){
 		HDC hdc_work;
 		hdc_work = CreateCompatibleDC(hdc);
 		SelectObject(hdc_work, boss_hb[state]);

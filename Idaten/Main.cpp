@@ -450,6 +450,7 @@ int Paint(HDC hdc)
 
 
 					mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+					mop.lpstrDeviceType = L"WaveAudio";
 					mop.lpstrElementName = L"res/Sound/stagebgm.wav";
 					mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 					mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
@@ -476,8 +477,9 @@ int Paint(HDC hdc)
 
 		if (cc > 1){
 
-			mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 
+			mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+			mop.lpstrDeviceType = L"WaveAudio";
 			mop.lpstrElementName = L"res/Sound/stagebgm.wav";
 			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 			mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
@@ -504,6 +506,13 @@ int Paint(HDC hdc)
 			if (SceneNum == Boss){
 				bsobj = std::make_shared< BossManager>();
 				bsAtkobj = std::make_shared<BossAtackManager>();
+
+				mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+				mop.lpstrDeviceType = L"MPEGVideo";
+				mop.lpstrElementName = L"res/Sound/bossbgm.mp3";
+				mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
+				mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
+
 
 			}
 
@@ -701,6 +710,12 @@ int Paint(HDC hdc)
 			rankobj.Reading();
 			rankobj.AddRanking(hWnd2);		//ランキング更新
 			flag = OFF;
+
+			mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
+			mop.lpstrDeviceType = L"WaveAudio";
+			mop.lpstrElementName = L"res/Sound/stagebgm.wav";
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
+			mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mpp);
 		}
 
 		rankobj.Ranking_Paint(hdc);

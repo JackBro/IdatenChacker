@@ -15,12 +15,13 @@ class BOSS
 public:
 	enum BossState{
 		MOVE,
-		ATTACK
+		ATTACK,
+		DEATH,
 	};
 protected:
 	HDC bosshdc;
 
-	HBITMAP boss_hb[2];
+	HBITMAP boss_hb[3];
 
 	int state;
 

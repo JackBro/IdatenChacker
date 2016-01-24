@@ -2,6 +2,7 @@
 #include"../_Option/debugmsg.h"
 #include "../Ranking/ranking.h"
 
+
 Timer::Timer()
 {
 }
@@ -12,9 +13,9 @@ void Timer::StartTimer(HDC hdc){
 }
 
 void Timer::ShowTime(HDC hdc){
-	S_time = (timewindows / 1) / 1000.0 - (timestart / 1) / 1000.0;					//windows起動-プログラムが起動した時
-
-	DebugStringFloatR("Time:%.3f秒", S_time, hdc, 850, 10, 40,-80);
+	S_time = (timewindows / 1) / 1000.0 - (timestart / 1) / 1000.0;					//windows起動-プログラムが起動した時77
+	
+	DebugStringFloatR("Time:%.3f秒", S_time, hdc, 840, 10, 40,-80);
 	return;
 }
 
