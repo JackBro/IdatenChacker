@@ -90,10 +90,10 @@ int  MasterCloud::move_boss(HDC hdc){
 			m_wind = nullptr;
 		}
 		
-		if (cnt % 10 == 0){
+		if (cnt % 20 == 0){
 			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
 			se_open.lpstrDeviceType = L"WaveAudio";
-			se_open.lpstrElementName = L"res/SE/tackle.wav";
+			se_open.lpstrElementName = L"res/SE/bossdead.wav";
 			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
 			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
 		}
@@ -101,7 +101,7 @@ int  MasterCloud::move_boss(HDC hdc){
 			boss.active = 0;
 		}
 		else if (cnt > 60){
-			boss.y += 5;
+			boss.y += 7;
 		}if (cnt % 2 == 0){
 			boss.x += 10;
 		}
@@ -115,7 +115,7 @@ int  MasterCloud::move_boss(HDC hdc){
 	if (m_attackCnt > Attack){
 		state = ATTACK;
 		m_attackCnt = 0;
-		Attack = int((boss.x-plstats->x) /12);
+		Attack = int((boss.x-plstats->x) /20);
 	}
 	else if (state == MOVE){
 		m_attackCnt++;

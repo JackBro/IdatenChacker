@@ -41,6 +41,7 @@ int MOVE::Move()
 /////ëÃå^ï à⁄ìÆ//////////////
 int MOVE::Move_DEBU()
 {
+
 	player.vy += grv;//èdóÕÇó^Ç¶ÇÈ
 	player.vx *= 0.8;
 	/******óßÇø********************************/
@@ -56,6 +57,11 @@ int MOVE::Move_DEBU()
 		if (GetKeyState('X') & 0x8000){
 			x = 1;
 			*Oil -= 1;
+			
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+
 		}
 	}
 	/*****************************************/
@@ -217,6 +223,10 @@ int MOVE::Move_POTYA()
 		if (GetKeyState('X') & 0x8000){
 			x = 1;
 			*Oil -= 1;
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+
 		}
 	}
 	/*****************************************/
@@ -393,6 +403,10 @@ int MOVE::Move_HUTHU()
 		if (GetKeyState('X') & 0x8000){
 			x = 1;
 			*Oil -= 1;
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+
 		}
 	}
 	/*****************************************/
@@ -565,6 +579,10 @@ int MOVE::Move_TYOIYASE()
 		if (GetKeyState('X') & 0x8000){
 			x = 1;
 			*Oil -= 1;
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+
 		}
 	}
 	/*****************************************/
@@ -740,6 +758,11 @@ int MOVE::Move_GARI()
 		if (GetKeyState('X') & 0x8000){
 			x = 1;
 			*Oil -= 1;
+
+			mciSendCommand(se_open.wDeviceID, MCI_CLOSE, 0, 0);
+			mciSendCommand(NULL, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&se_open);
+			mciSendCommand(se_open.wDeviceID, MCI_PLAY, 0, (DWORD)&se_playDevice);
+
 		}
 	}
 	/*****************************************/

@@ -11,6 +11,9 @@
 class MOVE{
 	
 	//アニメーション用
+	MCI_OPEN_PARMS se_open;
+	MCI_PLAY_PARMS se_playDevice;
+
 
 #define A_WALK3_Right    0
 #define A_WALK5_Right    1
@@ -81,6 +84,9 @@ public:
 		//タックルのフラグ
 		x = 0;
 		grv = 1.1;
+
+		se_open.lpstrDeviceType = L"WaveAudio";
+		se_open.lpstrElementName = L"res/SE/tackleother.wav";
 	}
 
 };

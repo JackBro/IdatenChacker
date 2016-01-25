@@ -59,7 +59,7 @@ int BossManager::chara_strc(player_info *tp){
 }
 void BossManager::SET_POINT(){
 	int desinate[1][2]{
-		{ 215 * CHIP_SIZE, 35 * CHIP_SIZE }
+		{ 215 * CHIP_SIZE, 33 * CHIP_SIZE }
 	};
 	std::vector<int>n;
 	for (int i = 0; i < 1; i++){
